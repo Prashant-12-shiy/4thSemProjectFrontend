@@ -1,12 +1,5 @@
-import { Button } from "@/components/ui/button"
-import { Calendar } from "@/components/ui/calendar";
+import Home from "@/pages/Home";
 
-
-export default function Home() {
-  return (
-    <main className="flex  flex-col items-center justify-between p-24">
-      <Button>Click me!</Button>
-    
-    </main> 
-  );
+export default function App() {
+  return <Home />;
 }
