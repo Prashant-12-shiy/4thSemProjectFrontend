@@ -1,3 +1,4 @@
+"use client"
 import Header from "@/components/Header";
 import React from "react";
 import Image from "next/image";
@@ -10,21 +11,21 @@ const Home = () => {
     <div>
       <Header />
 
-      <div className="flex justify-around px-20 h-[90vh] items-center">
+      <div className="flex justify-around px-20 max-md:px-6 m-auto h-[90vh] items-center">
         <div>
-          <h1 className="text-5xl font-semibold mb-4">
+          <h1 className="text-5xl font-semibold mb-4 max-md:text-2xl ">
             Student Management System
           </h1>
           <p>Simplify, Innovate, Educate</p>
         </div>
-        <Image src="/heroimg.png" alt="heroImg" height={360} width={360} />
+        <Image src="/heroimg.png" alt="heroImg" height={360} width={360} className="max-md:h-[200px] max-md:w-[250px] max-sm:h-[150px] max-sm:w-[200px]" />
       </div>
 
       <div>
         <h2 className="text-3xl font-semibold text-center mb-10">
           Key Features
         </h2>
-        <div className="grid grid-cols-3 gap-10 mx-10 justify-items-center  align-middle ">
+        <div className="grid grid-cols-3 gap-10 mx-10 justify-items-center  align-middle max-md:grid-cols-2 max-sm:grid-cols-1">
           {features.map((feature, index) => {
             return (
               <div
@@ -51,7 +52,7 @@ const Home = () => {
 
       <div className="min-h-[100vh] flex flex-col justify-center">
         <h2 className="font-semibold text-3xl text-center mt-10 mb-4">Pricings</h2>
-        <div className="flex gap-6 justify-center">
+        <div className="flex gap-6 justify-center max-md:flex-col max-md:items-center">
           {pricings.map((pricing, index) => {
             return (
             <div key={index} className="border border-black shadow-sm rounded-md px-8 py-3">

@@ -1,5 +1,6 @@
-import Home from "@/pages/Home";
+"use client"
+import Home from "@/app/pages/Home";
 
 export default function App() {
-  return <Home />;
+  return  <Home />;
 }
