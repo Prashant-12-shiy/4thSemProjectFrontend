@@ -1,4 +1,5 @@
-import React from "react";
+"use client"
+import React, { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -11,30 +12,26 @@ import { Button } from "../../ui/button";
 import { Label } from "../../ui/label";
 import { Input } from "../../ui/input";
 import { Separator } from "../../ui/separator";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "../../ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useForm } from "react-hook-form";
 import { EventData, usecreateEvent } from "@/services/api/auth/EventApi";
 
 const AddEventForm = () => {
+  const [isOpen, setIsOpen] = useState(false);
   const { mutate: CreateEventMutation } = usecreateEvent();
   const { register, handleSubmit } = useForm<EventData>();
 
   const handleCreateEvent = (data: EventData) => {
     console.log(data);
     
-    CreateEventMutation(data);
+    CreateEventMutation(data, {
+      onSuccess: () => {
+        setIsOpen(false);
+      }
+    });
   };
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger>
         <Button className="h-8 bg-white border-black/50 max-md:text-sm max-md:px-1 text-black border shadow-lg hover:bg-slate-100 hover:scale-105">
           Add New Event

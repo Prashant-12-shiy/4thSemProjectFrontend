@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import {
   Dialog,
   DialogClose,
@@ -28,6 +28,7 @@ const UpdateEventForm = ({
   eventDetails: EventData;
   eventId: string;
 }) => {
+  const [isOpen, setIsOpen] = useState(false);
   const { mutate: UpdateEventMutation } = useUpdateEvent();
   const { mutate: DeleteEventMutation } = useDeleteEvent();
   const { register, handleSubmit } = useForm<EventData>({
@@ -42,7 +43,11 @@ const UpdateEventForm = ({
   const handleUpdateEvent = (data: any) => {
     const id = eventId;
 
-    UpdateEventMutation({ id, data });
+    UpdateEventMutation({ id, data }, {
+      onSuccess: () => {
+        setIsOpen(false);
+      }
+    });
   };
 
   const handleEventDelete = () => {
@@ -51,7 +56,7 @@ const UpdateEventForm = ({
   };
 
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger>
         <Cog className="opacity-90 h-5 hover:rotate-90 transition-all duration-300 ease-in-out cursor-pointer" />
       </DialogTrigger>

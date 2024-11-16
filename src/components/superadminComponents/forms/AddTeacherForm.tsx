@@ -35,6 +35,7 @@ interface TeacherLoginData {
 }
 
 const AddTeacherForm = () => {
+  const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { register, handleSubmit, control } = useForm<TeacherLoginData>();
   const { mutate: createTeacherMutation } = useCreateTeacher();
@@ -45,6 +46,7 @@ const AddTeacherForm = () => {
       createTeacherMutation(data,{
         onSuccess: () => {
           setIsLoading(false)
+          setIsOpen(false);
         },
         onError: () => {
           setIsLoading(false)
@@ -57,7 +59,7 @@ const AddTeacherForm = () => {
   };
 
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger>
         <Button className="h-8 bg-white border-black/50 max-md:text-sm max-md:px-1 text-black border shadow-lg hover:bg-slate-100 hover:scale-105">
           Add Teacher

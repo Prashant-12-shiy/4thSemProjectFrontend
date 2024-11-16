@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -16,15 +16,20 @@ import { useForm } from "react-hook-form";
 import { useCreateClass } from "@/services/api/auth/ClassApi";
 
 const AddClassForm = () => {
+  const [isOpen, setIsOpen] = useState(false);
   const {mutate: CreateClassMutation} = useCreateClass();
   const {register, handleSubmit} = useForm();
 
   const handleAddClass = (data: any) => {
-    CreateClassMutation(data);
+    CreateClassMutation(data, {
+      onSuccess: () => {
+        setIsOpen(false); // Close dialog on success
+      },
+    });
   }
 
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger>
         <Button className="h-8 bg-white border-black/50 max-md:text-sm max-md:px-1 text-black border shadow-lg hover:bg-slate-100 hover:scale-105">
           Add Course

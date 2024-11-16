@@ -21,9 +21,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../../ui/select";
-import { Settings2 } from "lucide-react";
+import { EllipsisVertical, Settings2 } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
-import { Teacher, UpdateTeacher, useUpdateTeacher } from "@/services/api/auth/TeacherApi";
+import {
+  Teacher,
+  UpdateTeacher,
+  useUpdateTeacher,
+} from "@/services/api/auth/TeacherApi";
 
 interface FormData {
   name: string;
@@ -34,9 +38,9 @@ interface FormData {
   classInCharge: string;
 }
 
-const TeacherEditForm = ({ teacherId, teacherDetails }: any) => {
+const StudentEditForm = ({ teacherId, teacherDetails }: any) => {
   const [isOpen, setIsOpen] = useState(false);
-  const {mutate: UpdateTeacherMutation} = useUpdateTeacher();
+  const { mutate: UpdateTeacherMutation } = useUpdateTeacher();
   const { register, handleSubmit, control } = useForm<FormData>({
     defaultValues: {
       name: teacherDetails?.name,
@@ -44,28 +48,34 @@ const TeacherEditForm = ({ teacherId, teacherDetails }: any) => {
       password: teacherDetails?.password,
       role: teacherDetails?.role,
       course: teacherDetails?.course?.name, // Set course name as default
-      classInCharge: teacherDetails?.classInCharge?.name // Set classInCharge name as default
-    }
+      classInCharge: teacherDetails?.classInCharge?.name, // Set classInCharge name as default
+    },
   });
 
   const handleUpdateTeacher = (data: any) => {
     // console.log(teacherDetails);
     const id = teacherId;
-    
-    UpdateTeacherMutation({id, data}, {
-      onSuccess: () => {
-        setIsOpen(false);
+
+    UpdateTeacherMutation(
+      { id, data },
+      {
+        onSuccess: () => {
+          setIsOpen(false);
+        },
       }
-    });
+    );
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger>
-        <Settings2 className=" h-6 w-5" />
+      <DialogTrigger asChild>
+        <p>ShowMore</p>
       </DialogTrigger>
-        <DialogContent className="max-md:max-w-[90vw] max-md:rounded-md ">
-      <form onSubmit={handleSubmit(handleUpdateTeacher)} className="flex flex-col gap-4">
+      <DialogContent className="max-md:max-w-[90vw] max-md:rounded-md ">
+        <form
+          onSubmit={handleSubmit(handleUpdateTeacher)}
+          className="flex flex-col gap-4"
+        >
           <DialogHeader>
             <DialogTitle>Update Teacher</DialogTitle>
             <DialogDescription className="text-xs">
@@ -82,20 +92,20 @@ const TeacherEditForm = ({ teacherId, teacherDetails }: any) => {
 
             <div>
               <Label>Email</Label>
-              <Input type="email" {...register("email")}/>
+              <Input type="email" {...register("email")} />
             </div>
           </div>
 
           <Label>Password</Label>
-          <Input type="password" {...register("password")}/>
+          <Input type="password" {...register("password")} />
 
           <Label>Role</Label>
-          <Input type="text" value="Teacher"  />
+          <Input type="text" value="Teacher" />
 
           <div className="flex gap-5">
             <div>
               <Label>Course</Label>
-              <Input type="text" {...register("course")}/>
+              <Input type="text" {...register("course")} />
             </div>
 
             <div>
@@ -106,7 +116,10 @@ const TeacherEditForm = ({ teacherId, teacherDetails }: any) => {
                 defaultValue=""
                 render={({ field }) => {
                   return (
-                    <Select onValueChange={field.onChange} defaultValue={teacherDetails?.classInCharge?.name}>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={teacherDetails?.classInCharge?.name}
+                    >
                       <SelectTrigger className="w-[200px] max-md:w-[100px]">
                         <SelectValue placeholder="Select a Class" />
                       </SelectTrigger>
@@ -129,10 +142,10 @@ const TeacherEditForm = ({ teacherId, teacherDetails }: any) => {
 
           <Separator />
           <Button type="submit">Update</Button>
-      </form>
-        </DialogContent>
+        </form>
+      </DialogContent>
     </Dialog>
   );
 };
 
-export default TeacherEditForm;
+export default StudentEditForm;

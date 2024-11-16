@@ -76,12 +76,14 @@ const Sidebar = () => {
               <UserPen /> Students
             </CollapsibleTrigger>
             <CollapsibleContent className="text-base font-medium pl-14">
-              Student
+              <SheetClose asChild>
+                <Link href="/superadmin/student"> Student</Link>
+              </SheetClose>
             </CollapsibleContent>
             <CollapsibleContent className="text-base font-medium pl-14">
-            <SheetClose asChild>
-              <Link href="/superadmin/student/classes">  Classes</Link>
-            </SheetClose>
+              <SheetClose asChild>
+                <Link href="/superadmin/student/classes"> Classes</Link>
+              </SheetClose>
             </CollapsibleContent>
             <CollapsibleContent className="text-base font-medium pl-14">
               Grade
