@@ -31,7 +31,7 @@ const page = () => {
         <AddClassForm />
       </div>
 
-      <div className="grid grid-cols-4 gap-4 justify-items-center">
+      <div className="grid grid-cols-4 gap-4 justify-items-center max-md:grid-cols-2">
         {classData?.map((classes, index) => {
           return (
             <div

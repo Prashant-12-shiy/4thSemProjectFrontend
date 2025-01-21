@@ -33,7 +33,7 @@ const page = () => {
         <AddEventForm/>
       </div>
 
-      <div className="flex gap-5 *:w-full *:border *:border-black *:rounded-sm *:p-5 mt-5">
+      <div className="flex gap-5 *:w-full *:border *:border-black *:rounded-sm *:p-5 mt-5   max-md:flex-col">
         <div>
           <h2 className="font-semibold text-xl">Past Events</h2>
           <div>

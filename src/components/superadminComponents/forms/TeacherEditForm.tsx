@@ -30,7 +30,7 @@ interface FormData {
   email: string;
   password: string;
   role: string;
-  course: string;
+  courseName: string;
   classInCharge: string;
 }
 
@@ -43,7 +43,7 @@ const TeacherEditForm = ({ teacherId, teacherDetails }: any) => {
       email: teacherDetails?.email,
       password: teacherDetails?.password,
       role: teacherDetails?.role,
-      course: teacherDetails?.course?.name, // Set course name as default
+      courseName: teacherDetails?.course?.name, // Set course name as default
       classInCharge: teacherDetails?.classInCharge?.name // Set classInCharge name as default
     }
   });
@@ -95,7 +95,7 @@ const TeacherEditForm = ({ teacherId, teacherDetails }: any) => {
           <div className="flex gap-5">
             <div>
               <Label>Course</Label>
-              <Input type="text" {...register("course")}/>
+              <Input type="text" {...register("courseName")}/>
             </div>
 
             <div>

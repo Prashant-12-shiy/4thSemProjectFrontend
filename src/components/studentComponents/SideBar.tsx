@@ -20,13 +20,11 @@ import Image from "next/image";
 import cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { useGetMyDetails } from "@/services/api/auth/TeacherApi";
+import { useGetMyDetails } from "@/services/api/auth/StudentApi";
 
 const Sidebar = () => {
   const router = useRouter();
   const {data: personalDetails} = useGetMyDetails();
-  console.log(personalDetails);
-  
   const handleLogout = () => {
     cookies.remove("token"), cookies.remove("role");
     router.push("/");
@@ -47,7 +45,7 @@ const Sidebar = () => {
           />
           <div>
             <SheetTitle>{personalDetails?.name}</SheetTitle>
-            <SheetDescription>{personalDetails?.course?.name} Teacher</SheetDescription>
+            <SheetDescription>{personalDetails?.class?.name} Class</SheetDescription>
           </div>
         </SheetHeader>
         <div className="mt-10 *:mb-3 *:text-xl font-semibold *:flex *:gap-3  cursor-pointer">
@@ -59,11 +57,11 @@ const Sidebar = () => {
 
           <SheetClose asChild>
             <Link
-              href="/teachers/students"
+              href="/students/grade"
               className="flex gap-3 items-center"
             >
               {" "}
-              <BookOpen /> Students{" "}
+              <BookOpen /> Grade{" "}
             </Link>
           </SheetClose>
 {/* 
@@ -84,10 +82,10 @@ const Sidebar = () => {
           </Collapsible> */}
 
           <SheetClose asChild>
-            <Link href="/teachers/attendence">
+            <Link href="/students/course">
               {" "}
               <GraduationCap />
-              Attendance
+              Course
             </Link>
           </SheetClose>
 
@@ -101,13 +99,13 @@ const Sidebar = () => {
               <BookOpen /> Grade{" "}
             </Link>
           </SheetClose> */}
-
+{/* 
           <SheetClose asChild>
             <Link href="/teachers/task">
               {" "}
               <CalendarClock /> Tasks
             </Link>
-          </SheetClose>
+          </SheetClose> */}
 
           <p onClick={() => handleLogout()}>LogOut</p>
         </div>

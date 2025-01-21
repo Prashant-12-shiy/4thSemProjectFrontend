@@ -74,3 +74,77 @@ export const useGetStudentById = (id: string) => {
 
     return mutation
   }
+
+
+  
+const getMyDetails = async () => {
+    try {
+        const response = await axiosInstance.get("/api/student/getMyDetails");
+
+        return response.data.data;
+    } catch (error: any) {
+        throw new Error(error.response.data.message || "An error Occured");
+    }
+}
+
+
+export const useGetMyDetails = () => {
+    return useQuery({
+      queryKey: ["getmydetailsStudent"],
+      queryFn: getMyDetails,
+    });
+  };
+
+  const getGrade = async () => {
+    try {
+      const response = await axiosInstance.get("/api/student/grades");
+  
+      return response.data;
+    } catch (error: any) {
+      throw new Error(error.response.data.message || "An error Occured");
+    }
+  };
+  
+  export const useGetGrade = () => {
+    return useQuery({
+      queryKey: ["getGrade"],
+      queryFn: getGrade,
+    });
+  };
+  
+  const getCourse = async () => {
+    try {
+      const response = await axiosInstance.get("/api/student/courses");
+  
+      return response.data;
+    } catch (error: any) {
+      throw new Error(error.response.data.message || "An error Occured");
+    }
+  };
+  
+  export const useGetCourse = () => {
+    return useQuery({
+      queryKey: ["getCourse"],
+      queryFn: getCourse,
+    });
+  };
+  
+
+
+  const getTask = async () => {
+    try {
+      const response = await axiosInstance.get("/api/student/getTask");
+  
+      return response.data.task;
+    } catch (error: any) {
+      throw new Error(error.response.data.message || "An error Occured");
+    }
+  };
+  
+  export const useGetTask = () => {
+    return useQuery({
+      queryKey: ["getTask"],
+      queryFn: getTask,
+    });
+  };
+  

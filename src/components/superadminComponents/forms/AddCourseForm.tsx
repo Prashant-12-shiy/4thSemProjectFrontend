@@ -54,18 +54,18 @@ const AddCourseForm = () => {
           </div>
 
           <div>
-            <Label>Teacher</Label>
+            <Label>Class</Label>
             <Select>
               <SelectTrigger className="w-[200px] max-md:w-[100px]">
-                <SelectValue placeholder="Select a Teacher" />
+                <SelectValue placeholder="Select a Class" />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
-                  <SelectLabel>Teachers</SelectLabel>
-                  <SelectItem value="John Doe">John Doe</SelectItem>
-                  <SelectItem value="Jane Smith">Jane Smith</SelectItem>
-                  <SelectItem value="Alice Johnson">Alice Johnson</SelectItem>
-                  <SelectItem value="Roborta Brown">Roborta Brown</SelectItem>
+                  <SelectLabel>Class</SelectLabel>
+                  <SelectItem value="6">6</SelectItem>
+                  <SelectItem value="7">7</SelectItem>
+                  <SelectItem value="8">8</SelectItem>
+                  <SelectItem value="9">9</SelectItem>
                 </SelectGroup>
               </SelectContent>
             </Select>

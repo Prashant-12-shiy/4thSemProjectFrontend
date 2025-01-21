@@ -1,3 +1,4 @@
+"use client"
 import AddCourseForm from "@/components/superadminComponents/forms/AddCourseForm";
 import CourseEditForm from "@/components/superadminComponents/forms/CourseEditForm";
 import {
@@ -14,13 +15,25 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { classes, courses } from "@/staticdata";
+import { useGetAllCourse } from "@/services/api/auth/CourseApi";
+import { classes,  } from "@/staticdata";
 import { Settings2 } from "lucide-react";
 import React from "react";
 
 const page = () => {
+  const {data: courses} = useGetAllCourse();
+  console.log(courses);
 
-
+  interface Course {
+    _id: string;
+    name: string;
+    code: string;
+    description?: string;
+    teacher?: { _id: string; name: string };
+    credits: number;
+    classes?: { _id: string; name: string };
+  }
+  
   return (
     <div>
       <div className="flex justify-between ">
@@ -30,53 +43,49 @@ const page = () => {
 
 
       <div>
-        <Accordion type="single" collapsible className="w-full">
-          {classes.map((classItems, index) => {
-            return (
-              <AccordionItem key={index} value={(index + 1).toString()}>
-                <AccordionTrigger>
-                  Class {classItems.name} Courses
-                </AccordionTrigger>
-                <AccordionContent>
-                  <Table>
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead className="w-8">SN</TableHead>
-                          <TableHead>Name</TableHead>
-                          <TableHead>Code</TableHead>
-                          <TableHead>Description</TableHead>
-                          <TableHead>Teacher</TableHead>
-                          <TableHead>Credits</TableHead>
-                          <TableHead className="w-10 "> </TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {courses.map((course, index) => {
-                          return (
-                            <TableRow key={index}>
-                              <TableCell>{index + 1}</TableCell>
-                              <TableCell>{course.name}</TableCell>
-                              <TableCell>{course.code}</TableCell>
-                              <TableCell>{course.description}</TableCell>
-                              <TableCell>{course.teacher}</TableCell>
-                              <TableCell>{course.credits}</TableCell>
-                              <TableCell className="opacity-80 cursor-pointer">
-                                {" "}
-                                <CourseEditForm/>
-                              </TableCell>
-                            </TableRow>
-                          );
-                        })}
-                      </TableBody>
-                    </Table>
-                  </Table>
-                </AccordionContent>
-              </AccordionItem>
-            );
-          })}
-        </Accordion>
-      </div>
+  <Accordion type="single" collapsible className="w-full">
+    {classes.map((classItem, index) => (
+      <AccordionItem key={index} value={index.toLocaleString()}>
+        <AccordionTrigger>
+          Class {classItem.name} Courses
+        </AccordionTrigger>
+        <AccordionContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-8">SN</TableHead>
+                <TableHead>Name</TableHead>
+                <TableHead>Code</TableHead>
+                <TableHead>Description</TableHead>
+                <TableHead>Teacher</TableHead>
+                <TableHead>Credits</TableHead>
+                <TableHead className="w-10"> </TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {courses
+                ?.filter((course: Course) => course?.classes?.name === classItem.name.toString())
+                .map((course: any, index: number) => (
+                  <TableRow key={course._id}>
+                    <TableCell>{index + 1}</TableCell>
+                    <TableCell>{course.name}</TableCell>
+                    <TableCell>{course.code}</TableCell>
+                    <TableCell>{course.description || "N/A"}</TableCell>
+                    <TableCell>{course.teacher?.name || "N/A"}</TableCell>
+                    <TableCell>{course.credits}</TableCell>
+                    <TableCell className="opacity-80 cursor-pointer">
+                      <CourseEditForm />
+                    </TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+          </Table>
+        </AccordionContent>
+      </AccordionItem>
+    ))}
+  </Accordion>
+</div>
+
     </div>
   );
 };

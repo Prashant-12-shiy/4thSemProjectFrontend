@@ -1,4 +1,4 @@
-import Sidebar from "@/components/teacherComponents/Sidebar";
+import Sidebar from "@/components/studentComponents/SideBar";
 import React from "react";
 
 export default function StudentLayout({

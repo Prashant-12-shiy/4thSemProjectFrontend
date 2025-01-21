@@ -10,7 +10,8 @@ export function middleware(req: NextRequest) {
   // Redirect to login if token is missing and trying to access /admin routes
   if (
     (!token && url.pathname.startsWith(routes.superAdmin))  ||
-    (!token && url.pathname.startsWith(routes.teacher))
+    (!token && url.pathname.startsWith(routes.teacher)) ||
+    (!token && url.pathname.startsWith(routes.student))
   ) {
     url.pathname = routes.home;
     return NextResponse.redirect(url);
