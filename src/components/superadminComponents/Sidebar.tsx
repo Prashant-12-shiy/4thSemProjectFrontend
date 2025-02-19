@@ -106,7 +106,7 @@ const Sidebar = () => {
           </SheetClose>
 
           <SheetClose asChild>
-            <Link href="#">
+            <Link href="/superadmin/notice">
               {" "}
               <MessagesSquare /> Notice
             </Link>

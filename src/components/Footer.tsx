@@ -45,7 +45,7 @@ const Footer = () => {
       <div className="flex items-start max-sm:grid max-sm:grid-cols-2 mt-10 max-sm:gap-7 max-sm:pl-9 justify-evenly bg-gray-200 pb-4">
         <>
           <Image
-            src="/next.svg"
+            src="/logo.svg"
             alt="learnSpace"
             width={200}
             height={200}

@@ -41,9 +41,11 @@ const page = () => {
   const { data: studentData } = useGetStudentById(id);
 
   useEffect(() => {
-    if (studentData?.attendence) {
+    if(!studentData?.attendance) return;
+
+    if (studentData?.attendance) {
       const today = new Date();
-      const startOfCurrentWeek = startOfWeek(today, { weekStartsOn: 0 }); // Monday as start of the week
+      const startOfCurrentWeek = startOfWeek(today, { weekStartsOn: 1 }); // Monday as start of the week
       const startOfCurrentMonth = startOfMonth(today);
       const startOfCurrentYear = startOfYear(today);
 
@@ -51,7 +53,7 @@ const page = () => {
       let monthCount = 0;
       let yearCount = 0;
 
-      studentData.attendence.forEach(
+      studentData.attendance.forEach(
         (attendance: { date: any; status: string }) => {
           const attendanceDate = parseISO(attendance.date); // Convert to Date object
 

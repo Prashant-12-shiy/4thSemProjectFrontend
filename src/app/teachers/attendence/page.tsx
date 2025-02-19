@@ -34,7 +34,12 @@ const page = () => {
 
   return (
     <div>
+      <div className="flex items-center justify-between">
       <h1 className="text-3xl font-semibold mb-4">Student Attendance</h1>
+      <div className="text-white bg-black rounded-lg px-5 py-2 border-none">
+          {format(Date.now(), "yyyy-MMM-dd")}
+      </div>
+      </div>
       <Table>
         <TableHeader>
           <TableRow>

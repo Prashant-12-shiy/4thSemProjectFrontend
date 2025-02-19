@@ -210,7 +210,7 @@ const AddStudentForm = () => {
 
           <Separator />
 
-          <Button type="submit">{isLoading ? <Loading /> : "Button"}</Button>
+          <Button type="submit">{isLoading ? <Loading /> : "Create"}</Button>
         </form>
       </DialogContent>
     </Dialog>

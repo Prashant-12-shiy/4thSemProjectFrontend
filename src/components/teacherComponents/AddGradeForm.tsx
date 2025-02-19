@@ -20,6 +20,7 @@ import {
 import { useAddGrade } from "@/services/api/auth/TeacherApi";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 const courseNames = [
   "Math",
@@ -45,32 +46,55 @@ const courseNames = [
 ];
 
 const terms = ["First", "Second", "Third", "Final"];
-
-const grades = ["A+", "A", "B+", "B", "C+", "C", "D", "F"];
+const getGrade = (mark: number): string => {
+  if (mark >= 90) return "A+";
+  if (mark >= 80) return "A";
+  if (mark >= 70) return "B+";
+  if (mark >= 60) return "B";
+  if (mark >= 50) return "C+";
+  if (mark >= 40) return "C";
+  if (mark >= 30) return "D";
+  return "F"; // Below 30 is a Fail
+};
 
 const AddGradeForm = (studentName: any) => {
+  const [isOpen, setIsOpen] = useState(false);
   const [selectedSubject, setSelectedSubject] = useState("");
   const [selectedTerm, setSelectedTerm] = useState("");
-  const [selectedGrade, setSelectedGrade] = useState("");
   const { mutate: AddGradeMutation } = useAddGrade();
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, watch, setValue } = useForm();
+
+  const mark = watch("mark", ""); // Watch the mark input field
+
+  const handleMarkChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    const markValue =
+      value === "" ? "" : Math.min(100, Math.max(0, Number(value))); // Keep mark between 0-100
+    setValue("mark", markValue); // Update form value
+    if (markValue !== "") {
+      setValue("grade", getGrade(markValue)); // Auto-calculate grade
+    }
+  };
 
   const handleAddGrade = (data: any) => {
     const finalData = {
       ...studentName,
       courseName: selectedSubject,
       term: selectedTerm,
-      grade: selectedGrade,
       ...data,
       mark: Number(data.mark),
     };
 
-    AddGradeMutation(finalData);
+    AddGradeMutation(finalData, {
+      onSuccess: () => {
+        setIsOpen(false);
+      }
+    });
   };
 
   return (
     <div>
-      <Dialog>
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogTrigger asChild>
           <Button>Add grade</Button>
         </DialogTrigger>
@@ -123,23 +147,17 @@ const AddGradeForm = (studentName: any) => {
                   placeholder="Total Mark"
                   max={100}
                   {...register("mark")}
+                  onChange={handleMarkChange} // Auto-update grade
                 />
 
-                <Select onValueChange={(value) => setSelectedGrade(value)}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Grade" />
-                  </SelectTrigger>
-                  <SelectContent className="max-h-60">
-                    {grades.map((grade) => (
-                      <SelectItem
-                        key={grade.toLowerCase().replace(/\s+/g, "-")}
-                        value={grade}
-                      >
-                        {grade}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                {/* Disabled Input for Auto-Calculated Grade */}
+                <Input
+                  type="text"
+                  placeholder="Grade"
+                  value={watch("grade", "")}
+                  disabled
+                  className="bg-gray-200 cursor-not-allowed"
+                />
               </div>
 
               <Input placeholder="Remarks" {...register("remarks")} />

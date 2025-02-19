@@ -25,7 +25,6 @@ import { useGetMyDetails } from "@/services/api/auth/TeacherApi";
 const Sidebar = () => {
   const router = useRouter();
   const {data: personalDetails} = useGetMyDetails();
-  console.log(personalDetails);
   
   const handleLogout = () => {
     cookies.remove("token"), cookies.remove("role");

@@ -14,15 +14,15 @@ import { Input } from "../../ui/input";
 import { Separator } from "../../ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { useForm } from "react-hook-form";
-import { EventData, usecreateEvent } from "@/services/api/auth/EventApi";
+import { NoticeData, useCreateNotice } from "@/services/api/auth/NoticeApi";
 
-const AddEventForm = () => {
+const AddNoticeForm = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { mutate: CreateEventMutation } = usecreateEvent();
-  const { register, handleSubmit } = useForm<EventData>();
+  const { mutate: CreateNoticeMutation } = useCreateNotice();
+  const { register, handleSubmit } = useForm<NoticeData>();
 
-  const handleCreateEvent = (data: EventData) => {
-    CreateEventMutation(data, {
+  const handleCreateNotice = (data: NoticeData) => {
+    CreateNoticeMutation(data, {
       onSuccess: () => {
         setIsOpen(false);
       }
@@ -32,38 +32,32 @@ const AddEventForm = () => {
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger>
         <Button className="h-8 bg-white border-black/50 max-md:text-sm max-md:px-1 text-black border shadow-lg hover:bg-slate-100 hover:scale-105">
-          Add New Event
+          Add New Notice
         </Button>
       </DialogTrigger>
       <DialogContent className="max-md:max-w-[90vw] max-md:rounded-md">
-        <form onSubmit={handleSubmit(handleCreateEvent)} className="flex flex-col gap-4">
+        <form onSubmit={handleSubmit(handleCreateNotice)} className="flex flex-col gap-4">
           <DialogHeader>
-            <DialogTitle>Add New Event</DialogTitle>
+            <DialogTitle>Add New Notice</DialogTitle>
             <DialogDescription className="text-xs">
-              Please fill out the form below to add a new event to the system.
-              Once submitted, the event will be visible to everyone.
+              Please fill out the form below to add a new Notice to the system.
+              Once submitted, the Notice will be visible to everyone.
             </DialogDescription>
           </DialogHeader>
           <Separator className="bg-black" />
           <div>
-            <Label>Event Name</Label>
+            <Label>Notice Name</Label>
             <Input type="text" {...register("name")} />
           </div>
 
           <Label>Description</Label>
           <Textarea {...register("description")} />
 
-          <div className="flex gap-5">
-            <div>
-              <Label>Venue</Label>
-              <Input type="text" {...register("venue")} />
-            </div>
-
             <div>
               <Label>Date</Label>
               <Input type="date" className="w-[200px]" {...register("date")} />
             </div>
-          </div>
+        
 
           <Separator />
           <Button type="submit">Create</Button>
@@ -73,4 +67,4 @@ const AddEventForm = () => {
   );
 };
 
-export default AddEventForm;
+export default AddNoticeForm;

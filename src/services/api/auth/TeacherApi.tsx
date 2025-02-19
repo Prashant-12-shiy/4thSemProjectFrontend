@@ -207,8 +207,10 @@ export const useMarkAttendence = () => {
     mutationFn: markAttendence,
     onSuccess: (data) => {
       queryclient.invalidateQueries({ queryKey: ["getClassStudent"] });
+    
+      
       toast.success(
-        data.attendance.student +
+        data.studentName +
           "has been marked as a " +
           data.attendance.status
       );
@@ -312,7 +314,7 @@ export const useAddGrade = () => {
     const mutation = useMutation({
         mutationFn: addGrade,
         onSuccess: () => {
-            toast.success("Grade Add ");
+            toast.success("Grade Added ");
             queryclient.invalidateQueries({queryKey: ["getStudentById"]})
         },
         onError: (error) => {
