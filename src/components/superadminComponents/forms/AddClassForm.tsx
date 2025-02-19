@@ -32,7 +32,7 @@ const AddClassForm = () => {
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger>
         <Button className="h-8 bg-white border-black/50 max-md:text-sm max-md:px-1 text-black border shadow-lg hover:bg-slate-100 hover:scale-105">
-          Add Course
+          Add Classes
         </Button>
       </DialogTrigger>
       <DialogContent className="max-md:max-w-[90vw] max-md:rounded-md">

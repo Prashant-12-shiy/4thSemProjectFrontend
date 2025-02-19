@@ -1,5 +1,5 @@
 "use client"
-import React from "react";
+import React, { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -14,10 +14,42 @@ import { Input } from "../../ui/input";
 import { Separator } from "../../ui/separator";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "../../ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { CoursesResponse, useCreateCourse } from "@/services/api/auth/CourseApi";
+import { useForm } from "react-hook-form";
+import { useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 const AddCourseForm = () => {
+  const queryClient = useQueryClient();
+    const [isOpen, setIsOpen] = useState(false);
+  const [selectedClass, setSelectedClass] = useState<string>("");
+  const {register, handleSubmit} = useForm(); 
+  const {mutate: createCourse, isPending} = useCreateCourse();
+
+  const handleCreateCourse = (data: any) => {
+    const finalData: CoursesResponse = {
+      courses: [
+        {
+          ...data,
+          className: selectedClass
+        }
+      ]
+    };
+    createCourse(finalData, {
+      onSuccess: () => {
+        toast.success("Course Created")
+        setIsOpen(false);
+        queryClient.invalidateQueries({ queryKey: ["getAllCourse"]})
+      },
+      onError: () => {
+        toast.error("Failed to create course")
+      }
+    });
+  };
+  
+
   return (
-    <Dialog>
+    <Dialog onOpenChange={setIsOpen} open={isOpen}>
     <DialogTrigger>
       <Button className="h-8 bg-white border-black/50 max-md:text-sm max-md:px-1 text-black border shadow-lg hover:bg-slate-100 hover:scale-105">
         Add Course
@@ -32,30 +64,31 @@ const AddCourseForm = () => {
         </DialogDescription>
       </DialogHeader>
       <Separator className="bg-black"/>
+      <form onSubmit={handleSubmit(handleCreateCourse)} className="*:mb-3">
       <div className="flex gap-5">
         <div>
           <Label>Name</Label>
-          <Input type="text" />
+          <Input type="text" {...register('name')} />
         </div>
 
         <div>
           <Label>Code</Label>
-          <Input type="text" />
+          <Input type="text" {...register('code')}/>
         </div>
       </div>
 
       <Label>Description</Label>
-      <Textarea/>
+      <Textarea {...register('description')}/>
 
       <div className="flex gap-5">
           <div>
             <Label>Credits</Label>
-            <Input type="number" />
+            <Input type="number" {...register('credits')} />
           </div>
 
           <div>
             <Label>Class</Label>
-            <Select>
+            <Select onValueChange={(value) => setSelectedClass(value)}>
               <SelectTrigger className="w-[200px] max-md:w-[100px]">
                 <SelectValue placeholder="Select a Class" />
               </SelectTrigger>
@@ -73,7 +106,8 @@ const AddCourseForm = () => {
         </div>
 
       <Separator />
-      <Button>Create</Button>
+      <Button disabled={isPending}>Create</Button>
+      </form>
     </DialogContent>
   </Dialog>
   )

@@ -1,5 +1,5 @@
-"use client"
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -21,16 +21,82 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../../ui/select";
-import { Settings2 } from "lucide-react";
+import { Loader, Settings2 } from "lucide-react";
 import { Textarea } from "../../ui/textarea";
+import { useGetAllTeacher } from "@/services/api/auth/TeacherApi";
+import { useForm } from "react-hook-form";
+import { useGetCourseBySuperAdmin, useUpdateCourse } from "@/services/api/auth/CourseApi";
+import { Course } from "@/app/superadmin/course/page";
+import { toast } from "sonner";
+import { useQueryClient } from "@tanstack/react-query";
 
-const CourseEditForm = () => {
+interface CourseEditFormProps {
+  courseId: string;
+}
+
+const CourseEditForm = ({courseId}: CourseEditFormProps) => {
+  const queryClient = useQueryClient();
+
+  const [isOpen, setIsOpen] = useState(false);
+  const {data: teacherData, isLoading: isLoadingTeacherData} = useGetAllTeacher();
+  const {data: courseData, isLoading: isLoadingCourseData} = useGetCourseBySuperAdmin(courseId);
+  const {mutate: updateCourse, isPending} = useUpdateCourse();
+
+  const {register, handleSubmit, reset} = useForm({
+    defaultValues: {
+      name: courseData?.name || "",
+      code: courseData?.code || "",
+      description: courseData?.description || "",
+      credits: courseData?.credits || 0,
+      className: courseData?.classes?.name
+    }
+  });
+
+  // Update form when courseData is loaded
+useEffect(() => {
+  if (courseData) {
+    reset({
+      name: courseData.name,
+      code: courseData.code,
+      description: courseData.description,
+      credits: courseData.credits,
+      className: courseData.classes.name
+    });
+  }
+}, [courseData, reset]);
+
+  const isLoading = isLoadingTeacherData || isLoadingCourseData;
+
+  
+  const handleEditCourse = (data: any) => {
+    const id = courseId;
+    const updatedData = {
+      ...data,
+      className: courseData.classes.name  
+    }
+    updateCourse({updatedData, id}, {
+      onSuccess: () => {
+        toast.success("Course updated");
+        setIsOpen(false);
+        queryClient.invalidateQueries({ queryKey: ["getAllCourse"]});
+      }
+    });
+    
+  }
+
+  if(isLoading) {
+    return <div className="w-full">
+      <Loader className="size-4 animate-spin"/>
+    </div>
+  }
+
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger>
         <Settings2 className=" h-6 w-5" />
       </DialogTrigger>
       <DialogContent className="max-md:max-w-[90vw] max-md:rounded-md">
+      <form onSubmit={handleSubmit(handleEditCourse)} className="*:mb-3">
         <DialogHeader>
           <DialogTitle>Update Courses</DialogTitle>
           <DialogDescription className="text-xs">
@@ -41,22 +107,22 @@ const CourseEditForm = () => {
         <div className="flex gap-5">
           <div>
             <Label>Name</Label>
-            <Input type="text" />
+            <Input type="text" {...register("name")}/>
           </div>
 
           <div>
             <Label>Code</Label>
-            <Input type="text" />
+            <Input type="text" {...register("code")}/>
           </div>
         </div>
 
         <Label>Description</Label>
-        <Textarea />
+        <Textarea {...register("description")}/>
 
         <div className="flex gap-5">
           <div>
             <Label>Credits</Label>
-            <Input type="number" />
+            <Input type="number" {...register("credits")} />
           </div>
 
           <div>
@@ -68,10 +134,11 @@ const CourseEditForm = () => {
               <SelectContent>
                 <SelectGroup>
                   <SelectLabel>Teachers</SelectLabel>
-                  <SelectItem value="John Doe">John Doe</SelectItem>
-                  <SelectItem value="Jane Smith">Jane Smith</SelectItem>
-                  <SelectItem value="Alice Johnson">Alice Johnson</SelectItem>
-                  <SelectItem value="Roborta Brown">Roborta Brown</SelectItem>
+                  {teacherData?.map((teacher, index) => (
+                    <SelectItem key={index} value={teacher.name}>
+                      {teacher.name}
+                    </SelectItem>
+                  ))}
                 </SelectGroup>
               </SelectContent>
             </Select>
@@ -79,7 +146,8 @@ const CourseEditForm = () => {
         </div>
 
         <Separator />
-        <Button>Update</Button>
+        <Button disabled={isPending}>Update</Button>
+      </form>
       </DialogContent>
     </Dialog>
   );

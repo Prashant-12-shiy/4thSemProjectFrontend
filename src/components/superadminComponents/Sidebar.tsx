@@ -85,9 +85,9 @@ const Sidebar = () => {
                 <Link href="/superadmin/student/classes"> Classes</Link>
               </SheetClose>
             </CollapsibleContent>
-            <CollapsibleContent className="text-base font-medium pl-14">
+            {/* <CollapsibleContent className="text-base font-medium pl-14">
               Grade
-            </CollapsibleContent>
+            </CollapsibleContent> */}
           </Collapsible>
 
           <SheetClose asChild>

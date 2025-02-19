@@ -15,25 +15,28 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useGetAllCourse } from "@/services/api/auth/CourseApi";
+import { useCreateCourse, useGetAllCourse } from "@/services/api/auth/CourseApi";
 import { classes,  } from "@/staticdata";
 import { Settings2 } from "lucide-react";
 import React from "react";
 
-const page = () => {
-  const {data: courses} = useGetAllCourse();
-  console.log(courses);
+export interface Course {
+  _id: string;
+  name: string;
+  code: string;
+  description?: string;
+  teacher?: { _id: string; name: string };
+  credits: number;
+  classes?: { _id: string; name: string };
+}
 
-  interface Course {
-    _id: string;
-    name: string;
-    code: string;
-    description?: string;
-    teacher?: { _id: string; name: string };
-    credits: number;
-    classes?: { _id: string; name: string };
-  }
-  
+const page = () => {
+
+  const {data: courses} = useGetAllCourse();
+
+
+ 
+
   return (
     <div>
       <div className="flex justify-between ">
@@ -74,7 +77,7 @@ const page = () => {
                     <TableCell>{course.teacher?.name || "N/A"}</TableCell>
                     <TableCell>{course.credits}</TableCell>
                     <TableCell className="opacity-80 cursor-pointer">
-                      <CourseEditForm />
+                      <CourseEditForm courseId={course._id} />
                     </TableCell>
                   </TableRow>
                 ))}
