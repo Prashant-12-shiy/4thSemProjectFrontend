@@ -1,14 +1,14 @@
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import cookies from "js-cookie";
-import { toast } from "sonner";
 
-const BaseUrl = process.env.PUBLIC_NEXT_BACKEND_URL;
+
+const BaseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 const loginSuperAdmin = async (data: any) => {
   try {
     const response = await axios.post(
-      BaseUrl + "/api/auth/loginSuperAdmin",
+      BaseUrl +  "/api/auth/loginSuperAdmin",
       data
     );
 
