@@ -64,22 +64,6 @@ const Sidebar = () => {
               <BookOpen /> Grade{" "}
             </Link>
           </SheetClose>
-{/* 
-          <Collapsible className="flex-col gap-0 justify-start ">
-            <CollapsibleTrigger className="text-start flex gap-3">
-              {" "}
-              <UserPen /> Students
-            </CollapsibleTrigger>
-            <CollapsibleContent className="text-base font-medium pl-14">
-              Student
-            </CollapsibleContent>
-            <CollapsibleContent className="text-base font-medium pl-14">
-              Classes
-            </CollapsibleContent>
-            <CollapsibleContent className="text-base font-medium pl-14">
-              Grade
-            </CollapsibleContent>
-          </Collapsible> */}
 
           <SheetClose asChild>
             <Link href="/students/course">
@@ -88,24 +72,6 @@ const Sidebar = () => {
               Course
             </Link>
           </SheetClose>
-
-          
-          {/* <SheetClose asChild>
-            <Link
-              href="#"
-              className="flex gap-3 items-center"
-            >
-              {" "}
-              <BookOpen /> Grade{" "}
-            </Link>
-          </SheetClose> */}
-{/* 
-          <SheetClose asChild>
-            <Link href="/teachers/task">
-              {" "}
-              <CalendarClock /> Tasks
-            </Link>
-          </SheetClose> */}
 
           <p onClick={() => handleLogout()}>LogOut</p>
         </div>
