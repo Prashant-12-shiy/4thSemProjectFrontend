@@ -3,11 +3,12 @@ import axios from "axios";
 import cookies from "js-cookie";
 import { toast } from "sonner";
 
+const BaseUrl = process.env.PUBLIC_NEXT_BACKEND_URL;
 
 const loginSuperAdmin = async (data: any) => {
   try {
     const response = await axios.post(
-      "http://localhost:5000/api/auth/loginSuperAdmin",
+      BaseUrl + "/api/auth/loginSuperAdmin",
       data
     );
 

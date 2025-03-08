@@ -1,11 +1,7 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 //export const baseURL = "https://hrm-backend.herokuapp.com";
-export const baseURL =
-//   process.env.NODE_ENV === "production"
-//     ? "https://voidnepal-hrm-api.onrender.com"
-//     : 
-    "http://localhost:5000";
+export const baseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 const axiosInstance = axios.create({
   baseURL: baseURL,
