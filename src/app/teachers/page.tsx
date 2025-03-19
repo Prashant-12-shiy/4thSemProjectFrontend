@@ -13,13 +13,16 @@ import React from "react";
 import { FaBell, FaCalendarAlt, FaUpload, FaCheckCircle } from "react-icons/fa";
 import { Progress } from "@/components/ui/progress";
 import { Calendar } from "@/components/ui/calendar";
+import Link from "next/link";
 
 const Page = () => {
   return (
     <div className="p-6 bg-gradient-to-br from-pink-50 to-purple-50 min-h-screen">
       {/* Header Section */}
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-4xl font-bold text-purple-900">Teacher Dashboard</h1>
+        <h1 className="text-4xl font-bold text-purple-900 max-md:text-lg">
+          Teacher Dashboard
+        </h1>
         <div className="flex items-center gap-4">
           <div className="relative">
             <FaBell className="text-2xl text-purple-900 cursor-pointer hover:text-purple-700" />
@@ -27,9 +30,11 @@ const Page = () => {
               3
             </span>
           </div>
-          <button className="bg-purple-900 text-white px-4 py-2 rounded-full hover:bg-purple-700 transition-colors">
-            Mark Attendance
-          </button>
+          <Link href="/teachers/attendence">
+            <button className="bg-purple-900 text-white px-4 py-2 rounded-full hover:bg-purple-700 transition-colors max-md:text-xs">
+              Mark Attendance
+            </button>
+          </Link>
         </div>
       </div>
 
@@ -97,9 +102,7 @@ const Page = () => {
                   <TableCell>{schedule.sn}</TableCell>
                   <TableCell>{schedule.class}</TableCell>
                   <TableCell>{schedule.time}</TableCell>
-                  <TableCell>
-                    {schedule.task || "No Task Assigned"}
-                  </TableCell>
+                  <TableCell>{schedule.task || "No Task Assigned"}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

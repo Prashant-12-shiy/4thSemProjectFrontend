@@ -32,7 +32,7 @@ const Page = () => {
     <div className="p-6 bg-gray-50 min-h-screen">
       {/* Header Section */}
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-semibold text-gray-900">Students</h1>
+        <h1 className="text-3xl font-semibold text-gray-900 max-md:text-lg">Students</h1>
         <div className="flex items-center gap-4">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />

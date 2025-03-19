@@ -75,7 +75,7 @@ const Page = () => {
   return (
     <div className="p-6 bg-gray-50 min-h-screen dark:bg-gray-900">
       <div className="flex items-center justify-between mb-8">
-        <h1 className="text-3xl font-bold text-gray-800 dark:text-white">Student Attendance</h1>
+        <h1 className="text-3xl max-md:text-lg font-bold text-gray-800 dark:text-white">Student Attendance</h1>
         <div className="text-white bg-gray-800 rounded-lg px-5 py-2 text-sm font-medium dark:bg-gray-700">
           {format(Date.now(), "yyyy-MMM-dd")}
         </div>

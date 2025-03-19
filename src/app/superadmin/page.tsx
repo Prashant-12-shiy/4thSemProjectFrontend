@@ -31,7 +31,7 @@ const Page = () => {
   const COLORS = ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0"];
 
   return (
-    <div className="p-6 bg-gradient-to-br from-pink-100 to-purple-100 min-h-screen">
+    <div className="p-6 bg-gradient-to-br from-pink-100 to-purple-100 ">
       <div className="flex justify-between mb-8">
         <h2 className="font-bold text-4xl max-md:text-2xl text-purple-900">
           Admin Dashboard
@@ -95,9 +95,9 @@ const Page = () => {
       </div>
 
       {/* Bar Chart Section */}
-    <div className="flex justify-between gap-5">
+    <div className="flex justify-between gap-5 flex-col">
 
-      <Card className="w-full mt-8 bg-white rounded-2xl shadow-lg border-2 border-purple-200">
+      <Card className="w-full mt-8 bg-white rounded-2xl shadow-lg border-2 border-purple-200 max-md:hidden">
         <CardHeader>
           <CardTitle className="text-purple-900 text-2xl">Weekly Attendance</CardTitle>
         </CardHeader>
@@ -120,7 +120,31 @@ const Page = () => {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="w-full overflow-x-auto">
+          <div className="w-full overflow-x-auto md:hidden">
+            <PieChart width={200} height={250}>
+              <Pie
+                data={pieChartData}
+                cx="50%"
+                cy="50%"
+                innerRadius={30}
+                outerRadius={50}
+                fill="#8884d8"
+                paddingAngle={2.5}
+                dataKey="value"
+                label
+              >
+                {pieChartData.map((entry, index) => (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={COLORS[index % COLORS.length]}
+                  />
+                ))}
+              </Pie>
+              <Tooltip />
+              <Legend />
+            </PieChart>
+          </div>
+          <div className="w-full overflow-x-auto max-md:hidden">
             <PieChart width={400} height={400}>
               <Pie
                 data={pieChartData}
