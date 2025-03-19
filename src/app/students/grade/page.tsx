@@ -1,6 +1,4 @@
 "use client";
-// import AddGradeForm from "@/components/teacherComponents/AddGradeForm";
-// import UpdateGradeForm from "@/components/teacherComponents/UpdateGradeForm";
 import {
   Card,
   CardContent,
@@ -8,7 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
+import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -18,87 +16,132 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useGetGrade } from "@/services/api/auth/StudentApi";
-import React from "react";
+import { Search, BookOpen, Star, CheckCircle, XCircle } from "lucide-react";
+import React, { useState } from "react";
 
-const page = () => {
-  const { data: gradeData } = useGetGrade();
+const Page = () => {
+  const { data: gradeData, isLoading } = useGetGrade();
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // Filter grades based on search query
+  const filteredGrades = gradeData?.filter((grade: any) =>
+    grade?.course?.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
-    <div>
-      <Card>
+    <div className="p-6 bg-gray-50 min-h-screen dark:bg-gray-900">
+      {/* Header Section */}
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-semibold text-gray-900 dark:text-white">
+          Grade Record
+        </h1>
+      </div>
+
+      {/* Search Bar */}
+      <div className="mb-6">
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500" />
+          <Input
+            type="text"
+            placeholder="Search grades by subject..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="pl-10 pr-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+          />
+        </div>
+      </div>
+
+      {/* Grade Table Section */}
+      <Card className="bg-white rounded-lg shadow-sm border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
         <CardHeader>
-          <div className="flex justify-between">
-            <CardTitle>Grade Record</CardTitle>
-            {/* <AddGradeForm studentName={studentData?.student?.name} /> */}
+          <div className="flex items-center gap-2">
+            <Star className="text-purple-500 dark:text-purple-400" />
+            <CardTitle className="text-xl font-semibold text-gray-900 dark:text-white">
+              Grade Summary
+            </CardTitle>
           </div>
-          <CardDescription>
-            {/* This shows the grade record of {studentData?.student?.name} */}
+          <CardDescription className="text-gray-500 dark:text-gray-400">
+            View your grades for each subject
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <h1>Grade Summary</h1>
-          {/* <p>First Term Grade:  */}
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Subject Name</TableHead>
-                <TableHead>First Term</TableHead>
-                <TableHead>Second Term</TableHead>
-                <TableHead>Third Term</TableHead>
-                <TableHead>Final Term</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {gradeData?.map((grade: any, index: number) => {
-                return (
-                  <TableRow key={index}>
-                    <TableCell>{grade?.course?.name}</TableCell>
-
+          {filteredGrades?.length > 0 ? (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="text-gray-700 font-semibold dark:text-gray-300">
+                    Subject Name
+                  </TableHead>
+                  <TableHead className="text-gray-700 font-semibold dark:text-gray-300">
+                    First Term
+                  </TableHead>
+                  <TableHead className="text-gray-700 font-semibold dark:text-gray-300">
+                    Second Term
+                  </TableHead>
+                  <TableHead className="text-gray-700 font-semibold dark:text-gray-300">
+                    Third Term
+                  </TableHead>
+                  <TableHead className="text-gray-700 font-semibold dark:text-gray-300">
+                    Final Term
+                  </TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filteredGrades.map((grade: any, index: number) => (
+                  <TableRow
+                    key={index}
+                    className="hover:bg-gray-50 transition-colors dark:hover:bg-gray-700"
+                  >
+                    <TableCell className="font-medium text-gray-900 dark:text-white">
+                      {grade?.course?.name}
+                    </TableCell>
                     {grade?.termGrades
                       ?.sort((a: any, b: any) => {
-                        const termOrder = ["First", "Second", "Third", "Final"]; // Define the desired order of terms
+                        const termOrder = ["First", "Second", "Third", "Final"];
                         return (
                           termOrder.indexOf(a.term) - termOrder.indexOf(b.term)
                         );
                       })
-                      .map((termgrade: any, index: number) => {
-                        return (
-                          <TableCell key={index}>
-                            <div className="flex items-center gap-3">
-                              <div>
-                                <span className="text-red-500">
-                                  {termgrade?.mark} Mark{" "}
-                                </span>{" "}
-                                <br />
-                                {termgrade?.grade}{" "}
-                                <span className="text-xs text-gray-500">
-                                  ({termgrade?.remarks})
-                                </span>
-                              </div>
-                              {/* <UpdateGradeForm studentGradeData={termgrade} studentId={studentData?.student?._id} courseId={grade?.course?._id}/> */}
+                      .map((termgrade: any, index: number) => (
+                        <TableCell key={index}>
+                          <div className="flex items-center gap-3">
+                            {termgrade?.mark >= 42 ? (
+                              <CheckCircle className="text-green-500 w-5 h-5" />
+                            ) : (
+                              <XCircle className="text-red-500 w-5 h-5" />
+                            )}
+                            <div>
+                              <span className="text-gray-900 dark:text-white">
+                                {termgrade?.mark} Mark
+                              </span>{" "}
+                              <br />
+                              <span className="text-sm text-gray-500 dark:text-gray-400">
+                                {termgrade?.grade} ({termgrade?.remarks})
+                              </span>
                             </div>
-                          </TableCell>
-                        );
-                      })}
+                          </div>
+                        </TableCell>
+                      ))}
                   </TableRow>
-                );
-              })}
-
-              <Separator />
-              <TableRow className="*:text-gray-500 font-semibold">
-                <TableCell>Final Grade</TableCell>
-                <TableCell>A</TableCell>
-                <TableCell>B</TableCell>
-                <TableCell>C</TableCell>
-                <TableCell>A</TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
-          {/* </p> */}
+                ))}
+              </TableBody>
+            </Table>
+          ) : (
+            <div className="flex flex-col items-center justify-center gap-4 py-8">
+              <BookOpen className="text-gray-400 w-12 h-12 dark:text-gray-500" />
+              <p className="text-gray-500 dark:text-gray-400">
+                No grades found.
+              </p>
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>
   );
 };
 
-export default page;
+export default Page;

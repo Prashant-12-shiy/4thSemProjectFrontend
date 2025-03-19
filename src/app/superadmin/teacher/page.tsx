@@ -19,18 +19,24 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Teacher, useGetAllTeacher } from "@/services/api/auth/TeacherApi";
-import { teachers } from "@/staticdata";
 import { format } from "date-fns";
-import { ChevronsUpDown, Search, Settings2 } from "lucide-react";
+import { Search, Settings2, Plus, User, Book, Users, CheckCircle, XCircle } from "lucide-react";
 import React, { useState } from "react";
 import { SelectGroup, SelectLabel } from "@radix-ui/react-select";
+import { PageLoader } from "@/components/page-loader";
+import { Badge } from "@/components/ui/badge";
 
-const page = () => {
+const Page = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedFilter, setSelectedFilter] = useState("byname");
   const { data: teacherData, isError, isLoading } = useGetAllTeacher();
 
+  if (isLoading) {
+    return <PageLoader />;
+  }
+
   const formattedDate = format(new Date(), "dd/MM/yyyy");
+
   const filterdata = teacherData
     ?.filter((teacher) => {
       const search = searchTerm.toLowerCase();
@@ -53,90 +59,114 @@ const page = () => {
     });
 
   return (
-    <div className="">
-      <div className="flex justify-between mb-4">
-        <h2 className="font-semibold text-3xl max-md:text-xl">Teachers</h2>
-        <p className="mr-10 max-md:mr-4 max-md:max-h-[40px] max-md:text-sm font-semibold border border-black rounded-lg px-4 max-md:px-2 flex items-center bg-black text-white">
+    <div className="p-6 bg-gray-50 min-h-screen dark:bg-gray-900">
+      {/* Header Section */}
+      <div className="flex justify-between items-center mb-8">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Teachers</h1>
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            Manage all teachers and their details.
+          </p>
+        </div>
+        <Badge className="bg-black text-white dark:bg-gray-700 dark:text-white">
           {formattedDate}
-        </p>
+        </Badge>
       </div>
 
-      <div className="flex justify-between items-center max-md:flex-col">
-        <div className="flex gap-3 items-center">
+      {/* Search and Filter Section */}
+      <div className="flex items-center justify-between mb-6">
+        <div className="relative flex-1 max-w-lg">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500" />
           <Input
-            placeholder="Search"
+            placeholder="Search teachers..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-[400px] my-3 h-8 border-black max-md:w-full"
+            className="pl-10 w-full"
           />
-          <Search className="cursor-pointer" />
         </div>
-
-        <div>
+        <div className="flex items-center gap-4">
           <Select onValueChange={(value) => setSelectedFilter(value)}>
-            <SelectTrigger className="flex items-center gap-1 max-md:my-2">
+            <SelectTrigger className="w-[150px]">
               <SelectValue placeholder="Filter" />
             </SelectTrigger>
-            <SelectContent className="cursor-pointer text-gray-600">
+            <SelectContent>
               <SelectGroup>
-                <SelectLabel>Filter</SelectLabel>
-                <SelectItem className=" hover:text-black" value="byname">
-                  By Name
-                </SelectItem>
-
-                <SelectItem className=" hover:text-black" value={"bystatus"}>
-                  By Status
-                </SelectItem>
-                <SelectItem className=" hover:text-black" value={"byclass"}>
-                  By Class
-                </SelectItem>
-                <SelectItem className=" hover:text-black" value={"clear"}>
-                  Clear
-                </SelectItem>
+                <SelectLabel>Filter By</SelectLabel>
+                <SelectItem value="byname">Name</SelectItem>
+                <SelectItem value="bystatus">Status</SelectItem>
+                <SelectItem value="byclass">Class</SelectItem>
+                <SelectItem value="clear">Clear</SelectItem>
               </SelectGroup>
             </SelectContent>
           </Select>
-        </div>
-
-        <div>
-          <AddTeacherForm />
+          <AddTeacherForm>
+            {/* <Button className="flex items-center gap-2">
+              <Plus className="w-4 h-4" /> Add Teacher
+            </Button> */}
+          </AddTeacherForm>
         </div>
       </div>
 
-      <div>
+      {/* Table Section */}
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
         <Table>
-          <TableHeader>
+          <TableHeader className="bg-gray-100 dark:bg-gray-700">
             <TableRow>
-              <TableHead className="w-8">SN</TableHead>
-              <TableHead>Name</TableHead>
-              <TableHead>Subject</TableHead>
-              <TableHead>Class Teacher</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead className="w-10 "> </TableHead>
+              <TableHead className="w-8 text-gray-700 dark:text-white">SN</TableHead>
+              <TableHead className="text-gray-700 dark:text-white">Name</TableHead>
+              <TableHead className="text-gray-700 dark:text-white">Subject</TableHead>
+              <TableHead className="text-gray-700 dark:text-white">Class Teacher</TableHead>
+              <TableHead className="text-gray-700 dark:text-white">Edit</TableHead>
+              {/* <TableHead className="w-10 text-gray-700 dark:text-white">Actions</TableHead> */}
             </TableRow>
           </TableHeader>
           <TableBody>
             {filterdata && filterdata.length > 0 ? (
-              filterdata.map((teacher: Teacher, index: number) => {
-                return (
-                  <TableRow key={teacher._id}>
-                    <TableCell>{index + 1}</TableCell>
-                    <TableCell>{teacher?.name}</TableCell>
-                    <TableCell>{teacher?.course?.name}</TableCell>
-                    <TableCell>{teacher?.classInCharge?.name }</TableCell>
-                    <TableCell>{"Active"}</TableCell>
-                    <TableCell className="opacity-80 cursor-pointer">
-                      <TeacherEditForm
-                        teacherId={teacher?._id}
-                        teacherDetails={teacher}
-                      />
-                    </TableCell>
-                  </TableRow>
-                );
-              })
+              filterdata.map((teacher: Teacher, index: number) => (
+                <TableRow
+                  key={teacher._id}
+                  className="hover:bg-gray-50 transition-colors dark:hover:bg-gray-700"
+                >
+                  <TableCell className="font-medium text-gray-900 dark:text-white">
+                    {index + 1}
+                  </TableCell>
+                  <TableCell className="flex items-center gap-3">
+                    <User className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                    <span>{teacher?.name}</span>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex items-center gap-2">
+                      <Book className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                      <span>{teacher?.course?.name}</span>
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex items-center gap-2">
+                      <Users className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                      <span>{teacher?.classInCharge?.name}</span>
+                    </div>
+                  </TableCell>
+                  {/* <TableCell>
+                    <Badge variant={teacher?.status === "Active" ? "default" : "destructive"}>
+                      {teacher?.status || "Active"}
+                    </Badge>
+                  </TableCell> */}
+                  <TableCell>
+                    <TeacherEditForm
+                      teacherId={teacher?._id}
+                      teacherDetails={teacher}
+                    />
+                  </TableCell>
+                </TableRow>
+              ))
             ) : (
               <TableRow>
-                <TableCell colSpan={6}>No teachers available.</TableCell>
+                <TableCell colSpan={6} className="py-8 text-center">
+                  <div className="flex flex-col items-center justify-center gap-4">
+                    <Users className="w-12 h-12 text-gray-400 dark:text-gray-500" />
+                    <p className="text-gray-500 dark:text-gray-400">No teachers found.</p>
+                  </div>
+                </TableCell>
               </TableRow>
             )}
           </TableBody>
@@ -146,4 +176,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

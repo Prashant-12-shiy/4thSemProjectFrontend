@@ -116,11 +116,13 @@ const AddTeacherForm = () => {
                       <SelectContent>
                         <SelectGroup>
                           <SelectLabel>Classes</SelectLabel>
-                          <SelectItem value="10A">10A</SelectItem>
-                          <SelectItem value="9B">9B</SelectItem>
-                          <SelectItem value="11C">11C</SelectItem>
-                          <SelectItem value="12A">12A</SelectItem>
+                          <SelectItem value="10">10</SelectItem>
+                          <SelectItem value="9">9</SelectItem>
                           <SelectItem value="8">8</SelectItem>
+                          <SelectItem value="7">7</SelectItem>
+                          <SelectItem value="6">6</SelectItem>
+                          <SelectItem value="5">5</SelectItem>
+                          <SelectItem value="4">4</SelectItem>
                         </SelectGroup>
                       </SelectContent>
                     </Select>
@@ -136,7 +138,7 @@ const AddTeacherForm = () => {
             type="submit"
             onClick={() => handleSubmit(handleTeacherCreate)()}
           >
-            {isLoading ? <Loading/> : "Button"} 
+            {isLoading ? <Loading/> : "Create"} 
           </Button>
         </DialogContent>
       </form>

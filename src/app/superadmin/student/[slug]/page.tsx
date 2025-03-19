@@ -8,7 +8,10 @@ const Page = () => {
   const { studentId } = useStudent();
   console.log(studentId);
 
-  // const { data: studentData } = useGetStudentById(studentId || "");
+  const { data } = useGetStudentById(studentId || "");
+
+  console.log(data);
+  
 
   const studentData = {
     name: "John Doe",

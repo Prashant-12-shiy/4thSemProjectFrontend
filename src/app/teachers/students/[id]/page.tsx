@@ -1,4 +1,5 @@
 "use client";
+import { PageLoader } from "@/components/page-loader";
 import AddGradeForm from "@/components/teacherComponents/AddGradeForm";
 import UpdateGradeForm from "@/components/teacherComponents/UpdateGradeForm";
 import {
@@ -17,6 +18,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Progress } from "@/components/ui/progress";
 import { useGetStudentById } from "@/services/api/auth/TeacherApi";
 import {
   isWithinInterval,
@@ -28,84 +30,95 @@ import {
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import { Search, User, Calendar, BookOpen, Star } from "lucide-react";
+import { Input } from "@/components/ui/input";
 
-const page = () => {
+const Page = () => {
   const [attendanceSummary, setAttendanceSummary] = useState({
     week: 0,
     month: 0,
     year: 0,
   });
+  const [searchQuery, setSearchQuery] = useState("");
   const params = useParams();
   const id = params.id.toString();
 
-  const { data: studentData } = useGetStudentById(id);
+  const { data: studentData, isLoading } = useGetStudentById(id);
 
   useEffect(() => {
-    if(!studentData?.attendance) return;
+    if (!studentData?.attendance) return;
 
-    if (studentData?.attendance) {
-      const today = new Date();
-      const startOfCurrentWeek = startOfWeek(today, { weekStartsOn: 1 }); // Monday as start of the week
-      const startOfCurrentMonth = startOfMonth(today);
-      const startOfCurrentYear = startOfYear(today);
+    const today = new Date();
+    const startOfCurrentWeek = startOfWeek(today, { weekStartsOn: 1 }); // Monday as start of the week
+    const startOfCurrentMonth = startOfMonth(today);
+    const startOfCurrentYear = startOfYear(today);
 
-      let weekCount = 0;
-      let monthCount = 0;
-      let yearCount = 0;
+    let weekCount = 0;
+    let monthCount = 0;
+    let yearCount = 0;
 
-      studentData.attendance.forEach(
-        (attendance: { date: any; status: string }) => {
-          const attendanceDate = parseISO(attendance.date); // Convert to Date object
+    studentData.attendance.forEach(
+      (attendance: { date: any; status: string }) => {
+        const attendanceDate = parseISO(attendance.date); // Convert to Date object
 
-          if (attendance.status === "Present") {
-            if (
-              isWithinInterval(attendanceDate, {
-                start: startOfCurrentWeek,
-                end: today,
-              })
-            ) {
-              weekCount++;
-            }
-            if (
-              isWithinInterval(attendanceDate, {
-                start: startOfCurrentMonth,
-                end: today,
-              })
-            ) {
-              monthCount++;
-            }
-            if (
-              isWithinInterval(attendanceDate, {
-                start: startOfCurrentYear,
-                end: today,
-              })
-            ) {
-              yearCount++;
-            }
+        if (attendance.status === "Present") {
+          if (
+            isWithinInterval(attendanceDate, {
+              start: startOfCurrentWeek,
+              end: today,
+            })
+          ) {
+            weekCount++;
+          }
+          if (
+            isWithinInterval(attendanceDate, {
+              start: startOfCurrentMonth,
+              end: today,
+            })
+          ) {
+            monthCount++;
+          }
+          if (
+            isWithinInterval(attendanceDate, {
+              start: startOfCurrentYear,
+              end: today,
+            })
+          ) {
+            yearCount++;
           }
         }
-      );
+      }
+    );
 
-      setAttendanceSummary({
-        week: weekCount,
-        month: monthCount,
-        year: yearCount,
-      });
-    }
+    setAttendanceSummary({
+      week: weekCount,
+      month: monthCount,
+      year: yearCount,
+    });
   }, [studentData]);
 
+  if (isLoading) {
+    return <PageLoader />;
+  }
+
+  // Filter grades based on search query
+  const filteredGrades = studentData?.grades?.filter((grade: any) =>
+    grade?.course?.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
-    <div>
-      <div className="flex gap-5">
+    <div className="p-6 bg-gray-50 min-h-screen">
+      {/* Student Profile Section */}
+      <div className="flex gap-5 items-center">
         <Image
-          className="rounded-full object-contain"
+          className="rounded-full object-cover border-2 border-purple-500"
           src="/me.png"
           alt="profile"
-          width={70}
-          height={70}
+          width={80}
+          height={80}
         />
         <div>
-          <h1 className="text-3xl font-semibold ">
+          <h1 className="text-3xl font-semibold text-gray-900">
             {studentData?.student?.name}
           </h1>
           <p className="text-gray-500">
@@ -114,102 +127,151 @@ const page = () => {
         </div>
       </div>
 
-      <Card className="mt-10">
+      {/* Attendance Summary Section */}
+      <Card className="mt-8 bg-white rounded-lg shadow-sm border border-gray-200">
         <CardHeader>
-          <CardTitle>Attendence Record</CardTitle>
-          <CardDescription>
-            This shows the attendence record of {studentData?.student?.name}
+          <CardTitle className="text-xl font-semibold text-gray-900">
+            Attendance Record
+          </CardTitle>
+          <CardDescription className="text-gray-500">
+            Attendance summary for {studentData?.student?.name}
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="bg-purple-50 p-4 rounded-lg">
+            <div className="flex items-center gap-2">
+              <Calendar className="text-purple-500" />
+              <h3 className="text-lg font-semibold text-purple-900">
+                Weekly Attendance
+              </h3>
+            </div>
+            <p className="text-gray-700 mt-2">
+              {attendanceSummary.week} Present
+            </p>
+            <Progress value={(attendanceSummary.week / 5) * 100} className="mt-2 bg-purple-200" />
+          </div>
+          <div className="bg-purple-50 p-4 rounded-lg">
+            <div className="flex items-center gap-2">
+              <Calendar className="text-purple-500" />
+              <h3 className="text-lg font-semibold text-purple-900">
+                Monthly Attendance
+              </h3>
+            </div>
+            <p className="text-gray-700 mt-2">
+              {attendanceSummary.month} Present
+            </p>
+            <Progress value={(attendanceSummary.month / 20) * 100} className="mt-2 bg-purple-200" />
+          </div>
+          <div className="bg-purple-50 p-4 rounded-lg">
+            <div className="flex items-center gap-2">
+              <Calendar className="text-purple-500" />
+              <h3 className="text-lg font-semibold text-purple-900">
+                Yearly Attendance
+              </h3>
+            </div>
+            <p className="text-gray-700 mt-2">
+              {attendanceSummary.year} Present
+            </p>
+            <Progress value={(attendanceSummary.year / 200) * 100} className="mt-2 bg-purple-200" />
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Grade Record Section */}
+      <Card className="mt-8 bg-white rounded-lg shadow-sm border border-gray-200">
+        <CardHeader>
+          <div className="flex justify-between items-center">
+            <CardTitle className="text-xl font-semibold text-gray-900">
+              Grade Record
+            </CardTitle>
+            <AddGradeForm studentName={studentData?.student?.name} />
+          </div>
+          <CardDescription className="text-gray-500">
+            Grade summary for {studentData?.student?.name}
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <h1>Attendance Summary</h1>
-          <p>Weekly Attendance: {attendanceSummary.week} Present</p>
-          <p>Monthly Attendance: {attendanceSummary.month} Present</p>
-          <p>Yearly Attendance: {attendanceSummary.year} Present</p>
+          <div className="mb-6">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <Input
+                type="text"
+                placeholder="Search by subject..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10 pr-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
+              />
+            </div>
+          </div>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="text-gray-700 font-semibold">
+                  Subject Name
+                </TableHead>
+                <TableHead className="text-gray-700 font-semibold">
+                  First Term
+                </TableHead>
+                <TableHead className="text-gray-700 font-semibold">
+                  Second Term
+                </TableHead>
+                <TableHead className="text-gray-700 font-semibold">
+                  Third Term
+                </TableHead>
+                <TableHead className="text-gray-700 font-semibold">
+                  Final Term
+                </TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {filteredGrades?.length > 0 ? (
+                filteredGrades.map((grade: any, index: number) => (
+                  <TableRow key={index} className="hover:bg-gray-50 transition-colors">
+                    <TableCell>{grade?.course?.name}</TableCell>
+                    {grade?.termGrades
+                      ?.sort((a: any, b: any) => {
+                        const termOrder = ["First", "Second", "Third", "Final"];
+                        return termOrder.indexOf(a.term) - termOrder.indexOf(b.term);
+                      })
+                      .map((termgrade: any, index: number) => (
+                        <TableCell key={index}>
+                          <div className="flex items-center gap-3">
+                            <div>
+                              <span className="text-red-500">
+                                {termgrade?.mark} Mark
+                              </span>{" "}
+                              <br />
+                              {termgrade?.grade}{" "}
+                              <span className="text-xs text-gray-500">
+                                ({termgrade?.remarks})
+                              </span>
+                            </div>
+                            <UpdateGradeForm
+                              studentGradeData={termgrade}
+                              studentId={studentData?.student?._id}
+                              courseId={grade?.course?._id}
+                            />
+                          </div>
+                        </TableCell>
+                      ))}
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={5} className="text-center py-8">
+                    <div className="flex flex-col items-center justify-center gap-4">
+                      <BookOpen className="text-gray-400 w-12 h-12" />
+                      <p className="text-gray-500">No grades found.</p>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
         </CardContent>
       </Card>
-      <div className="mt-10 ">
-        <Card>
-          <CardHeader>
-            <div className="flex justify-between">
-              <CardTitle>Grade Record</CardTitle>
-              <AddGradeForm studentName={studentData?.student?.name} />
-            </div>
-            <CardDescription>
-              This shows the grade record of {studentData?.student?.name}
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <h1>Grade Summary</h1>
-            {/* <p>First Term Grade:  */}
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Subject Name</TableHead>
-                  <TableHead>First Term</TableHead>
-                  <TableHead>Second Term</TableHead>
-                  <TableHead>Third Term</TableHead>
-                  <TableHead>Final Term</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {studentData?.grades?.map((grade: any, index: number) => {
-                  return (
-                    <TableRow key={index}>
-                      <TableCell>{grade?.course?.name}</TableCell>
-
-                      {grade?.termGrades
-                        ?.sort((a: any, b: any) => {
-                          const termOrder = [
-                            "First",
-                            "Second",
-                            "Third",
-                            "Final",
-                          ]; // Define the desired order of terms
-                          return (
-                            termOrder.indexOf(a.term) -
-                            termOrder.indexOf(b.term)
-                          );
-                        })
-                        .map((termgrade: any, index: number) => {
-                          return (
-                            <TableCell key={index}>
-                              <div className="flex items-center gap-3">
-                                <div>
-                                  <span className="text-red-500">
-                                    {termgrade?.mark} Mark{" "}
-                                  </span>{" "}
-                                  <br />
-                                  {termgrade?.grade}{" "}
-                                  <span className="text-xs text-gray-500">
-                                    ({termgrade?.remarks})
-                                  </span>
-                                </div>
-                                <UpdateGradeForm studentGradeData={termgrade} studentId={studentData?.student?._id} courseId={grade?.course?._id}/>
-                              </div>
-                            </TableCell>
-                          );
-                        })}
-                    </TableRow>
-                  );
-                })}
-
-                <Separator />
-                <TableRow className="*:text-gray-500 font-semibold">
-                  <TableCell>Final Grade</TableCell>
-                  <TableCell>A</TableCell>
-                  <TableCell>B</TableCell>
-                  <TableCell>C</TableCell>
-                  <TableCell>A</TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
-            {/* </p> */}
-          </CardContent>
-        </Card>
-      </div>
     </div>
   );
 };
 
-export default page;
+export default Page;

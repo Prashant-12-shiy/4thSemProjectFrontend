@@ -31,6 +31,7 @@ import {
 import Link from "next/link";
 import { useStudent } from "@/context/StudentContext";
 import AddStudentForm from "@/components/superadminComponents/forms/AddStudentForm";
+import { PageLoader } from "@/components/page-loader";
 
 const page = () => {
   interface Student {
@@ -41,6 +42,10 @@ const page = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedFilter, setSelectedFilter] = useState("byname");
   const { data: studentData, isError, isLoading } = useGetAllStudents();
+
+    if (isLoading) {
+      return <PageLoader/>
+    } 
 
   const { setStudentId } = useStudent();
 
@@ -128,7 +133,7 @@ const page = () => {
               <TableHead>Class</TableHead>
               <TableHead>Guardian Name</TableHead>
               <TableHead>Guardian Contact</TableHead>
-              <TableHead className="w-10 "> </TableHead>
+              {/* <TableHead className="w-10 "> </TableHead> */}
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -143,19 +148,19 @@ const page = () => {
                     <TableCell>{student?.guardianName}</TableCell>
                     <TableCell>{student?.guardianContact}</TableCell>
 
-                    <TableCell className="opacity-80 cursor-pointer">
+                    {/* <TableCell className="opacity-80 cursor-pointer"> */}
                       {/* <StudentEditForm 
                               teacherId={student?._id}
                               teacherDetails={student}
                             /> */}
-                      <Link
+                      {/* <Link
                         href={`/superadmin/student/${student?.name
                           .replace(/\s+/g, "-")
                           .toLowerCase()}`}
                           onClick={() => setStudentId(student?._id)}
                       >
                         Show More
-                      </Link>
+                      </Link> */}
 
                       {/* <DropdownMenu>
                         <DropdownMenuTrigger>
@@ -169,7 +174,7 @@ const page = () => {
                           <DropdownMenuItem>More</DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu> */}
-                    </TableCell>
+                    {/* </TableCell> */}
                   </TableRow>
                 );
               })
