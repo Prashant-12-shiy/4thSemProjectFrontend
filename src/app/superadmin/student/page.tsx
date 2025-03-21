@@ -57,8 +57,8 @@ const page = () => {
 
       if (selectedFilter === "byname") {
         return student.name.toLowerCase().includes(search);
-      } else if (selectedFilter === "bystatus") {
-        // return teacher.status.toLowerCase().includes(search);
+      } else if (selectedFilter === "byrollno") {
+        return student?.status.toLowerCase().includes(search);
       } else if (selectedFilter === "byclass") {
         return student?.class?.name.toLowerCase().includes(search);
       } else {
@@ -103,10 +103,9 @@ const page = () => {
                 <SelectItem className=" hover:text-black" value="byname">
                   By Name
                 </SelectItem>
-
-                <SelectItem className=" hover:text-black" value={"bystatus"}>
-                  By Status
-                </SelectItem>
+                <SelectItem className=" hover:text-black" value="byrollno">
+                  By Roll No
+                </SelectItem>        
                 <SelectItem className=" hover:text-black" value={"byclass"}>
                   By Class
                 </SelectItem>
