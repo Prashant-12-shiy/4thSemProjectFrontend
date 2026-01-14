@@ -43,7 +43,7 @@ const AddStudentForm = () => {
   const [selectedFile, setSelectedFile] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const { register, handleSubmit, control } = useForm<StudentLoginData>();
+  const { register, handleSubmit, control , formState: {errors}} = useForm<StudentLoginData>();
   const { mutate: createStudentMutation } = useCreateStudent();
 
   const handleFileInput = (file: any) => {
@@ -87,13 +87,13 @@ const AddStudentForm = () => {
     }
 
     try {
-        const newData: StudentData = {
-            ...data, 
-            profilePicture: imageUrl
-        }
+      const newData: StudentData = {
+        ...data,
+        profilePicture: imageUrl,
+      };
 
-        console.log(newData);
-        
+      console.log(newData);
+
       createStudentMutation(newData, {
         onSuccess: () => {
           setIsLoading(false);
@@ -117,7 +117,10 @@ const AddStudentForm = () => {
         </Button>
       </DialogTrigger>
       <DialogContent className="max-md:max-w-[90vw] max-md:rounded-md max-h-screen overflow-auto">
-        <form onSubmit={handleSubmit(handleStudentCreate)} className="flex gap-5 flex-col">
+        <form
+          onSubmit={handleSubmit(handleStudentCreate)}
+          className="flex gap-5 flex-col"
+        >
           <DialogHeader>
             <DialogTitle>Add New Student</DialogTitle>
             <DialogDescription className="text-xs">
@@ -143,7 +146,7 @@ const AddStudentForm = () => {
           <Label>Password</Label>
           <Input type="password" {...register("password")} />
 
-            {/* <Label>Photo</Label>
+          {/* <Label>Photo</Label>
             <Input type="file" /> */}
 
           <div className="flex gap-5">
@@ -204,7 +207,20 @@ const AddStudentForm = () => {
 
             <div>
               <Label>Guardian Contact</Label>
-              <Input type="text" {...register("guardianContact")} />
+              <Input
+                type="number"
+                {...register("guardianContact", {
+                  required: "Guardian contact is required",
+                  validate: (value) =>
+                    value.toString().startsWith("98") ||
+                    "Contact must start with 98",
+                })}
+              />
+              {errors.guardianContact && (
+  <p className="text-red-500 text-sm mt-1">
+    {errors.guardianContact.message}
+  </p>
+)}
             </div>
           </div>
 

@@ -32,6 +32,8 @@ import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { Search, User, Calendar, BookOpen, Star } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import AttendanceHistory from "@/components/teacherComponents/StudentAttendance";
 
 const Page = () => {
   const [attendanceSummary, setAttendanceSummary] = useState({
@@ -176,6 +178,10 @@ const Page = () => {
           </div>
         </CardContent>
       </Card>
+      
+
+        {/* <AttendanceHistory attendance={studentData.attendance}/> */}
+
 
       {/* Grade Record Section */}
       <Card className="mt-8 bg-white rounded-lg shadow-sm border border-gray-200">

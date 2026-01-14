@@ -15,6 +15,7 @@ import { Separator } from "../../ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { useForm } from "react-hook-form";
 import { NoticeData, useCreateNotice } from "@/services/api/auth/NoticeApi";
+import { toast } from "sonner";
 
 const AddNoticeForm = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -22,11 +23,15 @@ const AddNoticeForm = () => {
   const { register, handleSubmit } = useForm<NoticeData>();
 
   const handleCreateNotice = (data: NoticeData) => {
-    CreateNoticeMutation(data, {
-      onSuccess: () => {
-        setIsOpen(false);
-      }
-    });
+    if(data.date >= Date.now().toString()) {
+      toast.error("cannot create notice in past date")
+    } else {
+      CreateNoticeMutation(data, {
+        onSuccess: () => {
+          setIsOpen(false);
+        }
+      });
+    }
   };
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -55,7 +60,7 @@ const AddNoticeForm = () => {
 
             <div>
               <Label>Date</Label>
-              <Input type="date" className="w-[200px]" {...register("date")} />
+              <Input type="date"  className="w-[200px]" {...register("date")} />
             </div>
         
 

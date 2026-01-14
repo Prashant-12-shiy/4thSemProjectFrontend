@@ -73,7 +73,7 @@ const Page = () => {
               filteredStudents.map((student: any, index: number) => (
                 <TableRow
                   key={index}
-                  className="hover:bg-gray-50 transition-colors *:flex *:items-center"
+                  className="hover:bg-gray-50 transition-colors "
                 >
                   <TableCell>{index + 1}</TableCell>
                   <TableCell className="flex items-center gap-2">

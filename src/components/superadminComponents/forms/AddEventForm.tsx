@@ -15,6 +15,7 @@ import { Separator } from "../../ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { useForm } from "react-hook-form";
 import { EventData, usecreateEvent } from "@/services/api/auth/EventApi";
+import { toast } from "sonner";
 
 const AddEventForm = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -22,11 +23,15 @@ const AddEventForm = () => {
   const { register, handleSubmit } = useForm<EventData>();
 
   const handleCreateEvent = (data: EventData) => {
+    if(data.date >= Date.now().toString()) {
+      toast.error("Cannot create the event in past")
+    } else { 
     CreateEventMutation(data, {
       onSuccess: () => {
         setIsOpen(false);
       }
     });
+  }
   };
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
