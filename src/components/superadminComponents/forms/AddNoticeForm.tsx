@@ -23,7 +23,10 @@ const AddNoticeForm = () => {
   const { register, handleSubmit } = useForm<NoticeData>();
 
   const handleCreateNotice = (data: NoticeData) => {
-    if(data.date >= Date.now().toString()) {
+    const selectedDate = new Date(data.date).getTime();
+    const today = Date.now();
+
+    if(selectedDate < today) {
       toast.error("cannot create notice in past date")
     } else {
       CreateNoticeMutation(data, {

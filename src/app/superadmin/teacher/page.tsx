@@ -93,7 +93,7 @@ const Page = () => {
               <SelectGroup>
                 <SelectLabel>Filter By</SelectLabel>
                 <SelectItem value="byname">Name</SelectItem>
-                <SelectItem value="bystatus">Status</SelectItem>
+                {/* <SelectItem value="bystatus">Status</SelectItem> */}
                 <SelectItem value="byclass">Class</SelectItem>
                 <SelectItem value="clear">Clear</SelectItem>
               </SelectGroup>

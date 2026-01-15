@@ -23,8 +23,11 @@ const AddEventForm = () => {
   const { register, handleSubmit } = useForm<EventData>();
 
   const handleCreateEvent = (data: EventData) => {
-    if(data.date >= Date.now().toString()) {
-      toast.error("Cannot create the event in past")
+     const selectedDate = new Date(data.date).getTime();
+        const today = Date.now();
+    
+        if(selectedDate < today) {
+          toast.error("cannot create notice in past date")
     } else { 
     CreateEventMutation(data, {
       onSuccess: () => {

@@ -31,15 +31,20 @@ import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 
 interface CourseEditFormProps {
-  courseId: string;
+  courseDetails: string;
+  setIsOpen: any
 }
 
-const CourseEditForm = ({courseId}: CourseEditFormProps) => {
+const CourseEditForm = ({courseDetails, setIsOpen}: any) => {
+
   const queryClient = useQueryClient();
 
-  const [isOpen, setIsOpen] = useState(false);
+  
   const {data: teacherData, isLoading: isLoadingTeacherData} = useGetAllTeacher();
-  const {data: courseData, isLoading: isLoadingCourseData} = useGetCourseBySuperAdmin(courseId);
+  // const {data: courseData, isLoading: isLoadingCourseData} = useGetCourseBySuperAdmin(courseId);
+  // console.log(courseData);
+ const courseData = courseDetails;
+
   const {mutate: updateCourse, isPending} = useUpdateCourse();
 
   const {register, handleSubmit, reset} = useForm({
@@ -65,11 +70,11 @@ useEffect(() => {
   }
 }, [courseData, reset]);
 
-  const isLoading = isLoadingTeacherData || isLoadingCourseData;
+  // const isLoading = isLoadingTeacherData || isLoadingCourseData;
 
   
   const handleEditCourse = (data: any) => {
-    const id = courseId;
+    const id = courseDetails._id;
     const updatedData = {
       ...data,
       className: courseData.classes.name  
@@ -84,17 +89,14 @@ useEffect(() => {
     
   }
 
-  if(isLoading) {
-    return <div className="w-full">
-      <Loader className="size-4 animate-spin"/>
-    </div>
-  }
+  // if(isLoading) {
+  //   return <div className="w-full">
+  //     <Loader className="size-4 animate-spin"/>
+  //   </div>
+  // }
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger>
-        <Settings2 className=" h-6 w-5" />
-      </DialogTrigger>
+   
       <DialogContent className="max-md:max-w-[90vw] max-md:rounded-md">
       <form onSubmit={handleSubmit(handleEditCourse)} className="*:mb-3">
         <DialogHeader>
@@ -125,7 +127,7 @@ useEffect(() => {
             <Input type="number" {...register("credits")} />
           </div>
 
-          <div>
+          {/* <div>
             <Label>Teacher</Label>
             <Select>
               <SelectTrigger className="w-[200px] max-md:w-[100px]">
@@ -142,14 +144,13 @@ useEffect(() => {
                 </SelectGroup>
               </SelectContent>
             </Select>
-          </div>
+          </div> */}
         </div>
 
         <Separator />
         <Button disabled={isPending}>Update</Button>
       </form>
       </DialogContent>
-    </Dialog>
   );
 };
 
