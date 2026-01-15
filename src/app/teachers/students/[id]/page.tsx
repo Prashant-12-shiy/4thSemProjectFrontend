@@ -33,7 +33,7 @@ import React, { useEffect, useState } from "react";
 import { Search, User, Calendar, BookOpen, Star } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import AttendanceHistory from "@/components/teacherComponents/StudentAttendance";
+// import AttendanceHistory from "@/components/teacherComponents/StudentAttendance";
 
 const Page = () => {
   const [attendanceSummary, setAttendanceSummary] = useState({
