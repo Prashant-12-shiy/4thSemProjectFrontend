@@ -57,12 +57,15 @@ const getGrade = (mark: number): string => {
   return "F"; // Below 30 is a Fail
 };
 
-const AddGradeForm = (studentName: any) => {
+const AddGradeForm = ({studentName, studentCourses}: {studentName: any, studentCourses: any}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedSubject, setSelectedSubject] = useState("");
   const [selectedTerm, setSelectedTerm] = useState("");
   const { mutate: AddGradeMutation } = useAddGrade();
   const { register, handleSubmit, watch, setValue } = useForm();
+
+  console.log(studentName);
+  
 
   const mark = watch("mark", ""); // Watch the mark input field
 
@@ -78,7 +81,7 @@ const AddGradeForm = (studentName: any) => {
 
   const handleAddGrade = (data: any) => {
     const finalData = {
-      ...studentName,
+      studentName,
       courseName: selectedSubject,
       term: selectedTerm,
       ...data,
@@ -114,12 +117,12 @@ const AddGradeForm = (studentName: any) => {
                   <SelectValue placeholder="Select The subject" />
                 </SelectTrigger>
                 <SelectContent className="max-h-60">
-                  {courseNames.map((course) => (
+                  {studentCourses.map((course: any) => (
                     <SelectItem
-                      key={course.toLowerCase().replace(/\s+/g, "-")}
-                      value={course}
+                      key={course.name.toLowerCase().replace(/\s+/g, "-")}
+                      value={course.name}
                     >
-                      {course}
+                      {course.name}
                     </SelectItem>
                   ))}
                 </SelectContent>

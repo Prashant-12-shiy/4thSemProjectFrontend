@@ -43,7 +43,7 @@ const AddStudentForm = () => {
   const [selectedFile, setSelectedFile] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const { register, handleSubmit, control , formState: {errors}} = useForm<StudentLoginData>();
+  const { register, reset, handleSubmit, control , formState: {errors}} = useForm<StudentLoginData>();
   const { mutate: createStudentMutation } = useCreateStudent();
 
   const handleFileInput = (file: any) => {
@@ -55,49 +55,50 @@ const AddStudentForm = () => {
 
   const handleStudentCreate: SubmitHandler<StudentLoginData> = async (data) => {
     setIsLoading(true);
-    const formData = new FormData();
+    // const formData = new FormData();
 
-    if (!cloudName || !uploadPreset) {
-      throw new Error(
-        "Missing Cloudinary configuration. Ensure NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME and NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET are set in .env.local."
-      );
-    }
+    // if (!cloudName || !uploadPreset) {
+    //   throw new Error(
+    //     "Missing Cloudinary configuration. Ensure NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME and NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET are set in .env.local."
+    //   );
+    // }
 
-    formData.append("file", selectedFile);
-    formData.append("upload_preset", uploadPreset);
+    // formData.append("file", selectedFile);
+    // formData.append("upload_preset", uploadPreset);
+    // try {
+    //   // Send the file to Cloudinary
+    //   const response = await fetch(
+    //     `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, // Replace with your cloud name
+    //     {
+    //       method: "POST",
+    //       body: formData,
+    //     }
+    //   );
+
+    //   const data = await response.json();
+    //   if (response.ok) {
+    //     setImageUrl(data.secure_url); // Get the image URL
+    //     console.log("Uploaded image URL:", data.secure_url);
+    //   } else {
+    //     console.error("Upload failed:", data);
+    //   }
+    // } catch (error) {
+    //   console.error("Error uploading image:", error);
+    // }
+
     try {
-      // Send the file to Cloudinary
-      const response = await fetch(
-        `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, // Replace with your cloud name
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
+      // const newData: StudentData = {
+      //   ...data,
+      //   // profilePicture: imageUrl,
+      // };
 
-      const data = await response.json();
-      if (response.ok) {
-        setImageUrl(data.secure_url); // Get the image URL
-        console.log("Uploaded image URL:", data.secure_url);
-      } else {
-        console.error("Upload failed:", data);
-      }
-    } catch (error) {
-      console.error("Error uploading image:", error);
-    }
+      // console.log(newData);
 
-    try {
-      const newData: StudentData = {
-        ...data,
-        profilePicture: imageUrl,
-      };
-
-      console.log(newData);
-
-      createStudentMutation(newData, {
+      createStudentMutation(data, {
         onSuccess: () => {
           setIsLoading(false);
           setIsOpen(false);
+          reset();
         },
         onError: () => {
           setIsLoading(false);

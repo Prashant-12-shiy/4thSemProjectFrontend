@@ -57,7 +57,7 @@ export function middleware(req: NextRequest) {
 export const config = {
     matcher: [
         "/superadmin/:path*",
-        "/teachers/:path*",
+        "/teacher/:path*",
         "/students/:path*",
         "/",
         "/auth/login",

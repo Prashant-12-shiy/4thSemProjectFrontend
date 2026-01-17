@@ -61,7 +61,7 @@ const Sidebar = () => {
             <div className="mt-10 *:mb-3 *:text-xl font-semibold *:flex *:gap-3 cursor-pointer">
               <SheetClose asChild>
                 <Link
-                  href="/teachers"
+                  href="/teacher"
                   className={`flex gap-3 items-center ${
                     isActive("/teachers") ? "text-blue-500" : ""
                   }`}
@@ -117,9 +117,9 @@ const Sidebar = () => {
         </div>
         <div className="mt-10 *:mb-3 *:text-xl font-semibold *:flex *:gap-3 cursor-pointer">
           <Link
-            href="/teachers"
+            href="/teacher"
             className={`flex gap-3 items-center ${
-              isActive("/teachers") ? "text-blue-500" : ""
+              isActive("/teacher") ? "text-blue-500" : ""
             }`}
           >
             <Home /> DashBoard

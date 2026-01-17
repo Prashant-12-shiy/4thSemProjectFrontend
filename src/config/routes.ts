@@ -7,7 +7,7 @@
         course: "/superadmin/course",
         event: "/superadmin/event"
     },
-    teacher: "/teachers",
+    teacher: "/teacher",
     student: "/students"
 }
 

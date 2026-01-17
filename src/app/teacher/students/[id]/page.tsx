@@ -19,7 +19,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Progress } from "@/components/ui/progress";
-import { useGetStudentById } from "@/services/api/auth/TeacherApi";
+import { useGetMyDetails, useGetStudentById } from "@/services/api/auth/TeacherApi";
 import {
   isWithinInterval,
   parseISO,
@@ -33,6 +33,7 @@ import React, { useEffect, useState } from "react";
 import { Search, User, Calendar, BookOpen, Star } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import FirstTermReportPDF from "@/components/teacherComponents/GradeReportGenerator";
 // import AttendanceHistory from "@/components/teacherComponents/StudentAttendance";
 
 const Page = () => {
@@ -46,6 +47,9 @@ const Page = () => {
   const id = params.id.toString();
 
   const { data: studentData, isLoading } = useGetStudentById(id);
+  const {data: teacherData, isLoading: teacherDataLoading} = useGetMyDetails();
+  const teachername = teacherData?.name;
+
 
   useEffect(() => {
     if (!studentData?.attendance) return;
@@ -99,7 +103,7 @@ const Page = () => {
     });
   }, [studentData]);
 
-  if (isLoading) {
+  if (isLoading || teacherDataLoading) {
     return <PageLoader />;
   }
 
@@ -107,6 +111,7 @@ const Page = () => {
   const filteredGrades = studentData?.grades?.filter((grade: any) =>
     grade?.course?.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
+  
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
@@ -190,7 +195,7 @@ const Page = () => {
             <CardTitle className="text-xl font-semibold text-gray-900">
               Grade Record
             </CardTitle>
-            <AddGradeForm studentName={studentData?.student?.name} />
+            <AddGradeForm studentName={studentData?.student?.name} studentCourses={studentData?.courses} />
           </div>
           <CardDescription className="text-gray-500">
             Grade summary for {studentData?.student?.name}
@@ -276,6 +281,12 @@ const Page = () => {
           </Table>
         </CardContent>
       </Card>
+     <FirstTermReportPDF
+  studentData={studentData}
+  filteredGrades={filteredGrades}
+  classTeacherName={teachername}
+/>
+
     </div>
   );
 };

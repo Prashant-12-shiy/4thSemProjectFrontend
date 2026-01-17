@@ -20,7 +20,7 @@ const Page = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
   // Filter students based on search query
-  const filteredStudents = studentsData?.filter((student: any) =>
+  const filteredStudents = studentsData?.students.filter((student: any) =>
     student.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
@@ -87,7 +87,7 @@ const Page = () => {
                     {student.guardianContact}
                   </TableCell>
                   <TableCell>
-                    <Link href={`/teachers/students/${student._id}`}>
+                    <Link href={`/teacher/students/${student._id}`}>
                       <Button
                         variant="outline"
                         className="text-purple-700 border-purple-700 hover:bg-purple-50"

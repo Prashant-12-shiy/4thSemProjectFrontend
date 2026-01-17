@@ -24,7 +24,7 @@ const Page = () => {
   const { data: studentsData, isLoading } = useGetClassStudent();
   const { mutate: markAttendenceMutation } = useMarkAttendence();
   const [searchQuery, setSearchQuery] = useState("");
-  const [attendanceStatusFilter, setAttendanceStatusFilter] = useState<"all" | "present" | "absent">("all");
+  const [attendanceStatusFilter, setAttendanceStatusFilter] = useState<"all" | "Present" | "Absent">("all");
   const [selectedStudent, setSelectedStudent] = useState<{ name: string; status: string } | null>(null);
 
   if (isLoading) {
@@ -52,25 +52,21 @@ const Page = () => {
         setSelectedStudent(null); // Close modal after success
       },
       onError: () => {
-        toast.error("Failed to mark attendance. Please try again.");
+        // toast.error("Failed to mark attendance. Please try again.");
       },
     });
   };
 
   // Filter students based on search query and attendance status
-  const filteredStudents = studentsData
+  const filteredStudents = studentsData.students
     ?.filter((student: any) =>
       student.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       student.rollNumber.toString().includes(searchQuery)
-    )
-    ?.filter((student: any) => {
-      if (attendanceStatusFilter === "all") return true;
-      return student.status === attendanceStatusFilter;
-    });
+    );
 
   // Calculate attendance summary
-  const presentCount = studentsData?.filter((student: any) => student.status === "Present").length || 0;
-  const absentCount = studentsData?.filter((student: any) => student.status === "Absent").length || 0;
+  const presentCount = studentsData?.attendance?.filter((student: any) => student.status === "Present").length || 0;
+  const absentCount = studentsData?.attendance?.filter((student: any) => student.status === "Absent").length || 0;
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen dark:bg-gray-900">
@@ -93,15 +89,15 @@ const Page = () => {
             className="pl-10 w-full"
           />
         </div>
-        <select
+        {/* <select
           value={attendanceStatusFilter}
-          onChange={(e) => setAttendanceStatusFilter(e.target.value as "all" | "present" | "absent")}
+          onChange={(e) => setAttendanceStatusFilter(e.target.value as "all" | "Present" | "Absent")}
           className="bg-white border border-gray-300 rounded-lg px-4 py-2 text-sm dark:bg-gray-800 dark:border-gray-700 dark:text-white"
         >
           <option value="all">All</option>
           <option value="present">Present</option>
           <option value="absent">Absent</option>
-        </select>
+        </select> */}
       </div>
 
       {/* Attendance Summary */}

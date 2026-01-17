@@ -377,7 +377,7 @@ const Page = () => {
       </div>
 
       {/* Class Performance */}
-      <Card className="mt-6">
+      {/* <Card className="mt-6">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Award className="w-5 h-5" />
@@ -424,7 +424,7 @@ const Page = () => {
             ))}
           </div>
         </CardContent>
-      </Card>
+      </Card> */}
 
       {/* Quick Actions */}
       <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4">

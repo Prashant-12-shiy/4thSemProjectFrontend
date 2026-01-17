@@ -43,7 +43,7 @@ export const useGetStudentById = (id: string) => {
     password: string;
     role: string;
     className: string;
-    profilePicture: string;
+    // profilePicture: string;
     rollNumber: string;
     guardianName: string;
     guardianContact: string;

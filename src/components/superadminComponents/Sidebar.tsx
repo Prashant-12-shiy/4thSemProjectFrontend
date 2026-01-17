@@ -24,7 +24,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "../ui/collapsible";
-import cookies from "js-cookie";
+import Cookies from "js-cookie";
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 
@@ -33,7 +33,7 @@ const Sidebar = () => {
   const pathname = usePathname(); // Get the current route
 
   const handleLogout = () => {
-    cookies.remove("token"), cookies.remove("role");
+    Cookies.remove("token"), Cookies.remove("role");
     router.push("/");
   };
 

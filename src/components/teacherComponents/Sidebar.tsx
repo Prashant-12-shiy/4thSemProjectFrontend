@@ -62,9 +62,9 @@ const Sidebar = () => {
             <div className="mt-10 *:mb-3 *:text-xl font-semibold *:flex *:gap-3 cursor-pointer">
               <SheetClose asChild>
                 <Link
-                  href="/teachers"
+                  href="/teacher"
                   className={`flex gap-3 items-center ${
-                    isActive("/teachers") ? "text-blue-500" : ""
+                    isActive("/teacher") ? "text-blue-500" : ""
                   }`}
                 >
                   <Home /> DashBoard
@@ -73,9 +73,9 @@ const Sidebar = () => {
 
               <SheetClose asChild>
                 <Link
-                  href="/teachers/students"
+                  href="/teacher/students"
                   className={`flex gap-3 items-center ${
-                    isActive("/teachers/students") ? "text-blue-500" : ""
+                    isActive("/teacher/students") ? "text-blue-500" : ""
                   }`}
                 >
                   <BookOpen /> Students
@@ -84,9 +84,9 @@ const Sidebar = () => {
 
               <SheetClose asChild>
                 <Link
-                  href="/teachers/attendence"
+                  href="/teacher/attendence"
                   className={`flex gap-3 items-center ${
-                    isActive("/teachers/attendence") ? "text-blue-500" : ""
+                    isActive("/teacher/attendance") ? "text-blue-500" : ""
                   }`}
                 >
                   <GraduationCap /> Attendance
@@ -95,9 +95,9 @@ const Sidebar = () => {
 
               <SheetClose asChild>
                 <Link
-                  href="/teachers/task"
+                  href="/teacher/task"
                   className={`flex gap-3 items-center ${
-                    isActive("/teachers/task") ? "text-blue-500" : ""
+                    isActive("/teacher/task") ? "text-blue-500" : ""
                   }`}
                 >
                   <CalendarClock /> Tasks
@@ -129,36 +129,36 @@ const Sidebar = () => {
         </div>
         <div className="mt-10 *:mb-3 *:text-xl font-semibold *:flex *:gap-3 cursor-pointer">
           <Link
-            href="/teachers"
+            href="/teacher"
             className={`flex gap-3 items-center ${
-              isActive("/teachers") ? "text-blue-500" : ""
+              isActive("/teacher") ? "text-blue-500" : ""
             }`}
           >
             <Home /> DashBoard
           </Link>
 
           <Link
-            href="/teachers/students"
+            href="/teacher/students"
             className={`flex gap-3 items-center ${
-              isActive("/teachers/students") ? "text-blue-500" : ""
+              isActive("/teacher/students") ? "text-blue-500" : ""
             }`}
           >
             <BookOpen /> Students
           </Link>
 
           <Link
-            href="/teachers/attendence"
+            href="/teacher/attendance"
             className={`flex gap-3 items-center ${
-              isActive("/teachers/attendence") ? "text-blue-500" : ""
+              isActive("/teacher/attendence") ? "text-blue-500" : ""
             }`}
           >
             <GraduationCap /> Attendance
           </Link>
 
           <Link
-            href="/teachers/task"
+            href="/teacher/task"
             className={`flex gap-3 items-center ${
-              isActive("/teachers/task") ? "text-blue-500" : ""
+              isActive("/teacher/task") ? "text-blue-500" : ""
             }`}
           >
             <CalendarClock /> Tasks
